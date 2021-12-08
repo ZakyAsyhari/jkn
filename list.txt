@@ -1,0 +1,28 @@
+POST	/api/v2/index.php/auth/login/
+POST	/api/v2/index.php/auth/register/
+POST	/api/v2/index.php/auth/forgot/{member_id}
+
+POST 	/api/v2/index.php/accounts/
+GET 	/api/v2/index.php/accounts/{member_id}
+PUST 	/api/v2/index.php/accounts/{member_id}
+DELETE 	/api/v2/index.php/accounts/{member_id}
+
+POST 	/api/v2/index.php/category/
+GET  	/api/v2/index.php/category/
+GET 	/api/v2/index.php/category/{category_id}
+PUT  	/api/v2/index.php/category/{category_id}
+DELETE  /api/v2/index.php/category/{category_id}
+
+POST 	/api/v2/index.php/product/
+GET 	/api/v2/index.php/product/
+GET 	/api/v2/index.php/product/{product_id}
+PUT 	/api/v2/index.php/product/{product_id}
+DELETE 	/api/v2/index.php/product/{product_id}
+
+POST 	/api/v2/index.php/customer/
+GET 	/api/v2/index.php/customer/
+GET 	/api/v2/index.php/customer/{customer_id}
+PUT 	/api/v2/index.php/customer/{customer_id}
+DELETE 	/api/v2/index.php/customer/{customer_id}
+
+POST 	/api/v2/index.php/transaction/
