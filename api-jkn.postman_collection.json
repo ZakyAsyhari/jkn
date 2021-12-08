@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "f08fc97f-38d4-4d6b-a9ff-b4aacc9b689c",
+		"name": "api-jkn",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "operasi- all",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzODk4Nzg5OSwiZXhwIjoxNjQxNjE3NjQ1fQ.etAa5sLB2GVoEc2a68zpOYSW84tfOtVTyACYeE6EklA",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tanggalawal",
+							"value": "2020-11-28",
+							"type": "text"
+						},
+						{
+							"key": "tanggalakhir",
+							"value": "2020-12-28",
+							"type": "text"
+						},
+						{
+							"key": "kodepoli",
+							"value": "ANA",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/operasiall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"operasiall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "operasi",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzODk4Nzg5OSwiZXhwIjoxNjQxNjE3NjQ1fQ.etAa5sLB2GVoEc2a68zpOYSW84tfOtVTyACYeE6EklA",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nopeserta",
+							"value": "00009887908",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/operasi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"operasi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "elisabeth",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "elisabeth",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/rest/gettoken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"rest",
+						"gettoken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "status antrian",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzODk4Nzg5OSwiZXhwIjoxNjQxNjE3NjQ1fQ.etAa5sLB2GVoEc2a68zpOYSW84tfOtVTyACYeE6EklA",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodepoli",
+							"value": "01",
+							"type": "text"
+						},
+						{
+							"key": "kodedokter",
+							"value": "10008 ",
+							"type": "text"
+						},
+						{
+							"key": "tanggalperiksa",
+							"value": "2021-12-18",
+							"type": "text"
+						},
+						{
+							"key": "jampraktek",
+							"value": "a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/antrian/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"antrian",
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

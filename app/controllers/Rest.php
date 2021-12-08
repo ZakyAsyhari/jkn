@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
@@ -10,7 +10,7 @@ class Rest extends REST_Controller
     private $secretkey = 'bd5c6bfaf6d062a4a6f29012a050faeb';
     public $data = array();
     public $perpage = 5;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -24,7 +24,7 @@ class Rest extends REST_Controller
         $this->response(array(
             'status'    => FALSE,
             'message'   => $message,
-            'data'      => array()            
+            'data'      => array()
         ), REST_Controller::HTTP_NOT_FOUND);
     }
 
@@ -46,7 +46,7 @@ class Rest extends REST_Controller
         $password   = $this->post('password');
         $get_admin  = $this->login_model->is_valid($username);
 
-        if ($get_admin){
+        if ($get_admin) {
             if (md5($password) === $get_admin->password) {
                 $payload['id']          = $get_admin->id_user;
                 $payload['name']        = $get_admin->nama;
@@ -54,18 +54,18 @@ class Rest extends REST_Controller
                 $payload['iat']         = $date->getTimestamp();
                 $payload['exp']         = $date->getTimestamp() + 2629746; //satu bulan
                 $output                 =  array(
-                                                'status'    => TRUE,
-                                                'message'   => 'Login accepted.',
-                                                'data'      => array(
-                                                    'id'        => $get_admin->id_user,
-                                                    'token'     => JWT::encode($payload, $this->secretkey)
-                                                )
-                                        );
+                    'status'    => TRUE,
+                    'message'   => 'Login accepted.',
+                    'data'      => array(
+                        'id'        => $get_admin->id_user,
+                        'token'     => JWT::encode($payload, $this->secretkey)
+                    )
+                );
                 $this->response($output, REST_Controller::HTTP_OK);
             } else {
                 $this->view_token_fail($username, $password);
             }
-        }else {
+        } else {
             $this->view_token_fail($nama, $pass);
         }
     }
@@ -75,18 +75,22 @@ class Rest extends REST_Controller
     {
         switch ($mode) {
             case '0':
-                $message = 'Member not activated yet.';
+                // $message = 'Member not activated yet.';
+                $message = 'Username atau Password Tidak Sesuai';
                 break;
-            
+
             default:
-                $message = 'Wrong username or password.';
+                // $message = 'Wrong username or password.';
+                $message = 'Username atau Password Tidak Sesuai';
                 break;
         }
-        $this->response(array(
-            'status'    => FALSE,
-            'message'   => $message,
-            'data'      => array()
-        ), REST_Controller::HTTP_UNAUTHORIZED);
+
+        $this->response([
+            'metadata' => [
+                'message' => $message,
+                'code'    => 201
+            ]
+        ], REST_Controller::HTTP_UNAUTHORIZED);
     }
 
     //method untuk mengecek token setiap melakukan post, put, etc
@@ -97,12 +101,15 @@ class Rest extends REST_Controller
 
         try {
             $decode = JWT::decode($jwt, $this->secretkey, array('HS256'));
-            // debug($decode);
-            if ($this->login_model->is_valid_num($decode->username)>0) {
+
+            if (strtotime(date('Y-m-d H:i:s')) > $decode->exp && !empty($decode->exp)) {
+                return 19;
+            } else if ($this->login_model->is_valid_num($decode->username) > 0) {
                 return true;
             }
         } catch (Exception $e) {
-            exit('No authorization. Please contact our customer service.');
+            // exit('No authorization. Please contact our customer service.');
+            return 0;
         }
     }
 
@@ -113,28 +120,27 @@ class Rest extends REST_Controller
         $email      = $this->post('username');
         $password   = $this->post('password');
         $get_member  = $this->login_model->member_is_valid($email);
-        if ($get_member){
-            // var_dump($get_member);
+        if ($get_member) {
             // if (password_verify($password, $get_member->password)) {
             if ($password == $get_member->password) {
                 $payload['id']          = $get_member->id;
                 $payload['username']    = $get_member->username;
                 $payload['iat']         = $date->getTimestamp();
-                $payload['exp']         = $date->getTimestamp() + 2629746; //satu bulan
+                $payload['exp']         = $date->getTimestamp() + 2629746; //satu bulan 2629746
                 $output                 =  array(
-                                                'response'      => array(
-                                                    'token'     => JWT::encode($payload, $this->secretkey)
-                                                ),
-                                                'metadata'      => array(
-                                                    'message'     =>'Ok',
-                                                    'code'     =>200
-                                                ),                                                      
-                                        );
+                    'response'      => array(
+                        'token'     => JWT::encode($payload, $this->secretkey)
+                    ),
+                    'metadata'      => array(
+                        'message'     => 'Ok',
+                        'code'     => 200
+                    ),
+                );
                 $this->response($output, REST_Controller::HTTP_OK);
             } else {
                 $this->view_token_fail($email, $password, 1);
             }
-        }else {
+        } else {
             $this->view_token_fail($email, $password);
         }
     }
@@ -142,12 +148,27 @@ class Rest extends REST_Controller
     public function read_token()
     {
 
-        $jwt = $this->input->request_headers()['x-token'];
+        $headers = $this->input->request_headers();
+
+        if (empty($headers['x-username'])) {
+            exit('No authorization x-username. Please contact our customer service.');
+        } else if (empty($headers['x-token'])) {
+            exit('No authorization x-token. Please contact our customer service.');
+        }
+
+        $jwt = $headers['x-token'];
+        $jwt_user = $headers['x-username'];
+
         try {
             $decode = JWT::decode($jwt, $this->secretkey, array('HS256'));
-            return $decode;
+            if ($decode->username == $jwt_user) {
+                return $decode;
+            } else {
+                exit('x-username not same with x-token. Please contact our customer service.');
+            }
         } catch (Exception $e) {
-            exit('No authorization. Please contact our customer service.');
+            // exit('No authorization. Please contact our customer service.');
+            return 0;
         }
     }
 }
