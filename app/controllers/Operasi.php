@@ -4,9 +4,9 @@
  * Create an members account and give access to
  * members area.
  *
- * @author Eddy Subratha <eddy.subratha@gmail.com>
- * @version 1.0
- * @package api
+ * @author 
+ * @version 
+ * @package 
  */
 
 require_once APPPATH . 'controllers/Rest.php';
