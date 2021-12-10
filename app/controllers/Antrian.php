@@ -37,6 +37,233 @@ class Antrian extends Rest
      * @return string
      */
 
+    public function index_post()
+    {
+        $date       = new DateTime();
+        $data = array(
+            'nomorkartu'        => $this->post('nomorkartu'),
+            'nik'               => $this->post('nik'),
+            'norm'              => $this->post('norm'),
+            'notelp'            => $this->post('nohp'),
+            'tanggalperiksa'    => $this->post('tanggalperiksa'),
+            'kodepoli'          => $this->post('kodepoli'),
+            'nomorreferensi'    => $this->post('nomorreferensi'),
+            'jeniskunjungan'    => $this->post('jeniskunjungan'),
+            'iddokter'          => $this->post('kodedokter'),
+            'jampraktek'        => $this->post('jampraktek'),
+            // 'jenisrequest'      => $this->post('jenisrequest'),
+            // 'polieksekutif'     => $this->post('polieksekutif'),
+        );
+
+        $output         = [];
+        $keys_kosong    = null;
+        $keys_tgl       = null;
+        $keys_range     = null;
+        $keys_length    = null;
+        foreach ($data as $key => $value) {
+            if ($value == '' || $value == null) {
+                if ($key == 'nomorkartu' || $key == 'tanggalperiksa') {
+                    $keys_kosong = $key;
+                    break;
+                }
+            }
+
+            if ($key == 'nomorkartu') {
+                if (strlen($value) != 13) {
+                    $keys_length = $key;
+                }
+            }
+
+            // if ($key == 'jenisrequest') {
+            //     if ($value != 1 && $value != 2) {
+            //         $keys_kosong = $key;
+            //     }
+            // }
+            if ($key == 'jeniskunjungan') {
+                if ($value != 1 && $value != 2) {
+                    $keys_kosong = $key;
+                }
+            }
+
+            if ($key == 'tanggalperiksa') {
+                if (validateFormatDate($value)) {
+                    if (validateBackDate($value)) {
+                        $keys_tgl = $key;
+                    }
+                } else {
+                    $keys_tgl = $key;
+                }
+
+                if (validateInRangeDate($value, 90)) {
+                    $keys_range = $key;
+                }
+            }
+        }
+
+        if (($this->jwt != 1) && ($this->jwt != 19)) {
+            $output =  array(
+                'metadata' => [
+                    'message' => "Token Expired.",
+                    'code' => 201
+                ]
+            );
+        } else if (empty($keys_kosong)) {
+            if ($keys_tgl != null) {
+                // Validasi tanggal format gagal
+                $output =  array(
+                    'response' => null,
+                    'metadata' => array(
+                        'message'           => 'data antrian gagal dimasukkan',
+                        'cause'             => 'format tanggal salah atau backdate',
+                        'column'            => strtolower($keys_tgl),
+                        'code'              => 202
+                    ),
+                );
+            } else if ($keys_range != null) {
+                //validasi panjang no kartu
+                $output =  array(
+                    'response' => null,
+                    'metadata' => array(
+                        'message'           => 'data antrian gagal dimasukkan',
+                        'cause'             => 'tanggal antrian yang diminta melebihi 90 hari',
+                        'column'            => strtolower($keys_range),
+                        'code'              => 202
+                    ),
+                );
+            } else if ($keys_length != null) {
+
+                //validasi panjang no kartu
+                $output =  array(
+                    'response' => null,
+                    'metadata' => array(
+                        'message'           => 'data antrian gagal dimasukkan',
+                        'cause'             => 'panjang value kolom tidak sesuai',
+                        'column'            => strtolower($keys_length),
+                        'code'              => 202
+                    ),
+                );
+            } else {
+
+                # cek Antrean Hanya Dapat Diambil 1 Kali Pada Tanggal Yang Sama
+                $cek_antrean = $this->antrian->cek_antrian($data['nik']);
+                $cek_pasien = $this->antrian->cek_pasien($data['norm']);
+                $cek_jadwal = $this->antrian->cek_waktu_daftar($data);
+                // $reset_jadwal = $this->antrian->reset_jadwal($data);
+                $reset_jadwal['code'] = null;
+
+
+
+                if (!empty($cek_antrean)) {
+
+                    $output =  array(
+                        'metadata' => [
+                            'message' => "Nomor Antrean Hanya Dapat Diambil 1 Kali Pada Tanggal Yang Sama.",
+                            'code' => 201
+                        ]
+                    );
+                } else if (empty($cek_pasien)) {
+
+                    $output =  array(
+                        'metadata' => [
+                            'message' => "Data pasien ini tidak ditemukan, silahkan Melakukan Registrasi Pasien Baru",
+                            'code' => 202
+                        ]
+                    );
+                } else if ($cek_jadwal['code'] == 9) {
+                    // waktu pendaftaran > dari waktu buka poli
+                    $output =  array(
+                        'response' => null,
+                        'metadata' => array(
+                            'message'   => 'Pendaftaran Ke Poli ' . $cek_jadwal['namapoli'] . ' Sudah Tutup Jam ' . $cek_jadwal['jam'],
+                            'code'      => 202
+                        ),
+                    );
+                } else if ($cek_jadwal['code'] == 10) {
+                    // Pendaftaran ke Poli Ini Sedang Tutup
+                    $output =  array(
+                        'response' => null,
+                        'metadata' => array(
+                            'message'   => 'Pendaftaran ke Poli Ini Sedang Tutup',
+                            'code'      => 202
+                        ),
+                    );
+                // } else if ($reset_jadwal['code'] == 7) {
+                //     // Pendaftaran ke Poli Ini Sedang Tutup
+                //     $output =  array(
+                //         'response' => null,
+                //         'metadata' => array(
+                //             'message'           => 'data antrian gagal dimasukkan',
+                //             'cause'             => 'Jadwal Dokter ' . $reset_jadwal['nama'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
+                //             'code'              => 202
+                //         ),
+                //     );
+                } else {
+
+                    $solve = $this->antrian->antrian_insert($data);
+                    if ($solve['code'] == 1) {
+                        // Respon Ok
+                        $return = $this->antrian->antrian_get($solve['id']);
+                        $kuota = $this->antrian->set_kuota($data);
+
+                        $output = array(
+                            'response'      => array(
+                                'nomorantrean'      => 'A-' . $return->noantrian,
+                                'angkaantrean'      => $return->noantrian,
+                                'kodeboking'        => $return->id,
+                                'norm'              => $return->norm,
+                                'namapoli'          => $return->namapoli,
+                                'namadokter'        => $return->namadokter,
+                                'estimasidilayani'  => (int)$return->estimasidilayani,
+                                'sisakuotajkn'      => (int)$kuota['sisanonjkn'],
+                                'kuotajkn'          => (int)$kuota['kuotajkn'],
+                                'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
+                                'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
+                                'keterangan'        => 'Peserta harap 60 menit lebih awal guna pencatatan administrasi.'
+                            ),
+                            'metadata'      => array(
+                                'message'       => 'Ok',
+                                'code'          => 200
+                            ),
+                        );
+                    } else if ($solve['code'] == 2) {
+                        // telah mendaftar pada hari yang sama
+                        $output =  array(
+                            'response' => null,
+                            'metadata' => array(
+                                'message'           => 'data antrian gagal dimasukkan',
+                                'cause'             => 'pasien telah didaftarkan',
+                                'code'              => 202
+                            ),
+                        );
+                    } else {
+                        // Poli tidak ditemukan
+                        $output =  array(
+                            'response' => null,
+                            'metadata' => array(
+                                'message'           => 'Pendaftaran ke Poli Ini Sedang Tutup',
+                                'cause'             => 'kode poli kosong atau tidak sesuai jadwal',
+                                'code'              => 201
+                            ),
+                        );
+                    }
+                }
+            }
+        } else {
+            // Jika ada variabel yang kosong
+            $output =  array(
+                'response' => null,
+                'metadata' => array(
+                    'message'           => 'data antrian gagal dimasukkan',
+                    'cause'             => 'data kosong atau tidak sesuai',
+                    'column'            => strtolower($keys_kosong),
+                    'code'              => 202
+                ),
+            );
+        }
+
+        $this->response($output, Rest::HTTP_OK);
+    }
+
 
     public function status_post()
     {
@@ -97,8 +324,8 @@ class Antrian extends Rest
 
                 # ambil data dokter unit
                 $data = array(
-                    'tglperiksa' => $tanggal,
-                    'idDokter'       => $id_dokter
+                    'tanggalperiksa' => $tanggal,
+                    'iddokter'       => $id_dokter
                 );
                 $kuota = $this->antrian->set_kuota($data);
                 // $dokter_unit = $this->db->get_where('DOKTER_UNIT', ['ID_DOKTER' => $id_dokter])->first_row();
@@ -109,7 +336,7 @@ class Antrian extends Rest
                 # total antrian
                 $total_antrian = $this->db->select('count(ID) as total')
                     ->like('tglmasuk', $tgl_antrian, 'both')
-                    ->where('lokal_id', $data['idDokter'])
+                    ->where('lokal_id', $data['iddokter'])
                     ->get('mr_periksa')
                     ->first_row();
                 $antrian_total = $total_antrian->total;
