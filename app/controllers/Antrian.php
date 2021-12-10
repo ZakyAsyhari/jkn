@@ -148,7 +148,7 @@ class Antrian extends Rest
                 $cek_antrean = $this->antrian->cek_antrian($data['nik']);
                 $cek_pasien = $this->antrian->cek_pasien($data['norm']);
                 $cek_jadwal = $this->antrian->cek_waktu_daftar($data);
-                // $reset_jadwal = $this->antrian->reset_jadwal($data);
+                $reset_jadwal = $this->antrian->reset_jadwal($data);
                 $reset_jadwal['code'] = null;
 
 
@@ -187,16 +187,16 @@ class Antrian extends Rest
                             'code'      => 202
                         ),
                     );
-                // } else if ($reset_jadwal['code'] == 7) {
-                //     // Pendaftaran ke Poli Ini Sedang Tutup
-                //     $output =  array(
-                //         'response' => null,
-                //         'metadata' => array(
-                //             'message'           => 'data antrian gagal dimasukkan',
-                //             'cause'             => 'Jadwal Dokter ' . $reset_jadwal['nama'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
-                //             'code'              => 202
-                //         ),
-                //     );
+                } else if ($reset_jadwal['code'] == 7) {
+                    // Pendaftaran ke Poli Ini Sedang Tutup
+                    $output =  array(
+                        'response' => null,
+                        'metadata' => array(
+                            'message'           => 'data antrian gagal dimasukkan',
+                            'cause'             => 'Jadwal Dokter ' . $reset_jadwal['nama'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
+                            'code'              => 202
+                        ),
+                    );
                 } else {
 
                     $solve = $this->antrian->antrian_insert($data);
@@ -264,6 +264,152 @@ class Antrian extends Rest
         $this->response($output, Rest::HTTP_OK);
     }
 
+    public function batal_antrian_post()
+    {
+
+        $input = $this->post();
+        $kodebooking = $input['kodebooking'];
+        $alasan      = $input['keterangan'];
+
+        if ($this->jwt != 1) {
+            $this->response([
+                'metadata' => [
+                    'message' => "Token Expired.",
+                    'code' => 201
+                ]
+            ], 200);
+        } else if (empty($kodebooking)) {
+
+            $this->response([
+                'response' => null,
+                'metadata' => [
+                    'message' => 'kode booking tidak boleh kosong',
+                    'code'    => 201
+                ]
+            ], 200);
+        } else {
+
+
+            $antrian = $this->db->order_by('id', 'desc')->get_where('antrian_jkn', ['id' => $kodebooking])->first_row();
+
+            if (!empty($antrian)) {
+                $_start_date =new DateTime ($antrian->tanggalperiksa);
+
+                $_start_validate = $_start_date->format('Y-m-d');
+                // print_r($_start_validate);
+
+                if (empty($kodebooking) || validateBackDate($_start_validate)) {
+                    $pesan_gagal = 'Data Antrean tidak ditemukan';
+                } else if ($antrian->status == 5) {
+                    $pesan_gagal = 'Antrean Tidak Ditemukan atau Sudah Dibatalkan';
+                } else if ($antrian->status == 2) {
+                    $pesan_gagal = 'Pasien Sudah Dilayani, Antrean Tidak Dapat Dibatalkan';
+                }
+
+                if (!empty($pesan_gagal)) {
+                    $this->response([
+                        'metadata' => [
+                            'message' => $pesan_gagal,
+                            'code' => 201
+                        ]
+                    ], 200);
+                } else {
+
+                    $this->db->trans_start();
+
+                    $this->db->update('antrian_jkn', ['status' => 5, 'keterangan' => $alasan], ['id' => $kodebooking]);
+                    $this->db->trans_complete();
+
+                    if ($this->db->trans_status() === false) {
+
+                        $this->response([
+                            'metadata' => [
+                                'message' => 'gagal batal appointment',
+                                'code' => 201
+                            ]
+                        ], 200);
+                    } else {
+
+                        $this->response([
+                            'metadata' => [
+                                'message' => 'Ok',
+                                'code' => 200
+                            ]
+                        ], 200);
+                    }
+                }
+            } else {
+                $this->response([
+                    'metadata' => [
+                        'message' => 'Antrean Tidak Ditemukan',
+                        'code' => 201
+                    ]
+                ], 200);
+            }
+        }
+    }
+
+
+    public function checkin_post()
+    {
+
+        $input = $this->post();
+
+        if ($this->jwt != 1) {
+            $this->response([
+                'metadata' => [
+                    'message' => "Token Expired.",
+                    'code' => 201
+                ]
+            ], 200);
+        } else if (empty($input['kodebooking'])) {
+
+            $this->response([
+                'metadata' => [
+                    'message' => 'kode booking tidak boleh kosong',
+                    'code' => 201
+                ]
+            ], 200);
+        } else {
+
+            $appointment = $this->db->get_where('antrian_jkn', ['id' => $input['kodebooking']])->first_row();
+
+            if (empty($appointment)) {
+
+                $this->response([
+                    'metadata' => [
+                        'message' => 'Data antrian tidak ditemukan',
+                        'code' => 201
+                    ]
+                ], 200);
+            } else {
+
+                $this->db->trans_start();
+
+                $timestamp = date('Y-m-d H:i:s', $input['waktu']);
+                $this->db->update('antrian_jkn', ['status' => 2, 'checkin' => $timestamp], ['id' => $input['kodebooking']]);
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status()) {
+                    $this->response([
+                        'metadata' => [
+                            'message' => 'Ok',
+                            'code' => 200
+                        ]
+                    ], 200);
+                } else {
+                    $this->response([
+                        'metadata' => [
+                            'message' => 'Gagal melakukan check in',
+                            'code' => 201
+                        ]
+                    ], 200);
+                }
+            }
+        }
+    }
+
 
     public function status_post()
     {
@@ -325,21 +471,32 @@ class Antrian extends Rest
                 # ambil data dokter unit
                 $data = array(
                     'tanggalperiksa' => $tanggal,
-                    'iddokter'       => $id_dokter
+                    'iddokter'       => $id_dokter,
+                    'kodepoli'           => $kode_poli,
+                    'jampraktek'      => $jam_praktek
                 );
                 $kuota = $this->antrian->set_kuota($data);
                 // $dokter_unit = $this->db->get_where('DOKTER_UNIT', ['ID_DOKTER' => $id_dokter])->first_row();
 
-                $tgl_antrian = date('d-M-y', strtotime($tanggal));
-                $tgl_antrian = strtoupper($tgl_antrian);
-
                 # total antrian
-                $total_antrian = $this->db->select('count(ID) as total')
-                    ->like('tglmasuk', $tgl_antrian, 'both')
-                    ->where('lokal_id', $data['iddokter'])
-                    ->get('mr_periksa')
-                    ->first_row();
+                // $total_antrian = $this->db->select('count(ID) as total')
+                //     ->like('', $tgl_antrian, 'both')
+                //     ->where('lokal_id', $data['iddokter'])
+                //     ->where('status','1')
+                //     ->get('mr_periksa')
+                //     ->first_row();
+
+                    $total_antrian = $this->db->select('count(ID) as total')
+                                    ->like('tanggalperiksa', $data['tanggalperiksa'], 'both')
+                                    ->where('iddokter', $data['iddokter'])
+                                    ->where('kodepoli', $data['kodepoli'])
+                                    ->where('jampraktek',$data['jampraktek'])
+                                    ->where('status','1')
+                                    ->get('antrian_jkn')
+                                    ->first_row();
+                    // print_r($total_antrian);
                 $antrian_total = $total_antrian->total;
+                $sisa_antrian = $kuota['kuotajkn'] - $total_antrian->total;
 
                 # data estimasi antrian
                 
@@ -350,8 +507,8 @@ class Antrian extends Rest
                         'namapoli' => $poli->nama,
                         'namadokter' => $dokter->nm_user,
                         'totalantrean' => $antrian_total,
-                        'sisaantrean' => '0',
-                        'antreanpanggil' => 'A-21',
+                        'sisaantrean' => $sisa_antrian,
+                        'antreanpanggil' => '21',
                         'sisakuotajkn' => $kuota['sisajkn'],
                         'kuotajkn' => $kuota['kuotajkn'],
                         'sisakuotanonjkn' => $kuota['sisanonjkn'],
@@ -387,7 +544,7 @@ class Antrian extends Rest
         }
     }
 
-    public function sisah_post()
+    public function sisa_post()
     {
 
         $kode_booking = $this->post('kodebooking');
@@ -411,9 +568,9 @@ class Antrian extends Rest
 
             # ambil data appointment
             $appointment = $this->db->select('*')
-                ->from('mr_periksa')
+                ->from('antrian_jkn')
                 ->where('id', $kode_booking)
-                // ->where('status !=', 5)
+                ->where('status !=', 5)
                 ->get();
             // ->first_row();
 
@@ -428,14 +585,47 @@ class Antrian extends Rest
                 ], 200);
             }
 
-
             # ambil data antrian yang lagi berjalan
+            $sql = "SELECT * from  antrian_jkn
+                    where 
+                    status in (2) and tanggalperiksa like '%" . $appointment->tanggalperiksa . "%'
+                    order by id asc";
+
+            $antrian_sekarang = $this->db->query($sql)->result();
+
+            if (empty($antrian_sekarang)) {
+                return $this->response([
+                    'metadata' => [
+                        'message'   => 'Belum ada antrian berjalan',
+                        'code' => 201
+                    ]
+                ], 200);
+            }
+
+            # sisah antrian
+            $sisah_antrian = $this->db->select('count(id) as sisah_antrian')
+                ->from('antrian_jkn')
+                ->where('STATUS', 1)
+                ->like('tanggalperiksa', $appointment->tanggalperiksa, 'both')
+                ->get()
+                ->first_row();
+
+            $sisah_antrian_min_1 = sizeof($antrian_sekarang) - 1;
+
+            if ($sisah_antrian_min_1 <= 1) {
+                $sisah_antrian_min_1 = 1;
+            } else {
+                $sisah_antrian_min_1;
+            }
+
+            $waktu_antrian = strtotime($appointment->tanggalperiksa);
+
             $this->response([
                 'response' => [
                     'nomorantrean' => 'A' ,
-                    'namapoli' => '',
-                    'namadokter' => '',
-                    'sisaantrean' => '',
+                    'namapoli' => $appointment->namapoli,
+                    'namadokter' => $appointment->namadokter,
+                    'sisaantrean' => $appointment->sisaantrian,
                     'antreanpanggil' => '',
                     'waktutunggu' => '',
                     'keterangan' => ''

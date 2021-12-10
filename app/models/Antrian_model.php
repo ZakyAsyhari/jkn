@@ -152,7 +152,7 @@ class Antrian_model extends CI_Model
         $date_time_now = date('d-m-Y H:i:s');
         $days_num = no_hari($days_now);
 
-        $get_polis = $this->db->query("SELECT MAX(mr_j.akhir) as jamselesai, MAX(mp.nama) as NAMA 
+        $get_polis = $this->db->query("SELECT MAX(mr_j.akhir) as jamselesai, MAX(mp.nama) as nama 
                                     from mr_jadwal_tetap as mr_j
                                     join muser on muser.lokal_id = mr_j.dokter
                                     join mpoli mp on mp.poli = mr_j.poli
@@ -177,6 +177,40 @@ class Antrian_model extends CI_Model
         // } 
     }
 
+    public function reset_jadwal($data)
+    {
+        $days_now = date("D", strtotime(date('Y-m-d', strtotime($data['tanggalperiksa']))));
+        $time_now = date('H:i');
+        $date_time_now = date('d-m-Y H:i:s');
+        $date_now = date('d-m-Y');
+        $days_num = no_hari($days_now);
+
+        $get_polis = $this->db->query("SELECT mr_j.kondisi as kehadiran,mr_j.hari,muser.nm_user as dokter
+                                    from mr_jadwal_tetap as mr_j
+                                    join muser on muser.lokal_id = mr_j.dokter
+                                    join mpoli on mpoli.poli = mr_j.poli
+                                    where mpoli.poli is not null 
+                                        and mr_j.hari = $days_num
+                                        and '$time_now' between mr_j.awal and mr_j.akhir
+                                        and upper(mr_j.poli)=upper('$data[kodepoli]')
+                                    order by mr_j.dokter")->result_array();
+        // debug($get_polis);
+        // die();
+        if (!empty($get_polis)) {
+            $random_keys    = array_rand($get_polis, 1);
+            $get_poli       = $get_polis[$random_keys];
+
+            if ($get_poli['kehadiran'] == 0) {
+                $reset_jadwal = array('code' => 7);
+                $reset_jadwal['namadokter'] = isset($get_poli) ? $get_poli['dokter'] : null;
+                return $reset_jadwal;
+            }
+        } else {
+            $cek_jadwal = array('code' => 10);
+            return $cek_jadwal;
+        }
+    }
+
 
 
     public function antrian_get($id)
@@ -189,26 +223,36 @@ class Antrian_model extends CI_Model
 
     public function set_kuota($data)
     {
-        $tgl_antrian = date('d-M-y', strtotime($data['tanggalperiksa']));
+        // print_r($data);
+        // die();
+        $tgl_antrian = date('Y-m-d', strtotime($data['tanggalperiksa']));
         $tgl_antrian = strtoupper($tgl_antrian);
 
         # total antrian
-        // $total_antrian = $this->db->select('count(ID) as total')
-        //     ->like('tglmasuk', $tgl_antrian, 'both')
-        //     ->where('lokal_Id', $data['idDokter'])
-        //     ->get('mr_periksa')
-        //     ->first_row();
-        // $antrian_total = $total_antrian->total;
-
-        $dokter = $this->db->get_where('mr_jadwal_tetap', ['dokter' => $data['iddokter']])->first_row();
-        $kuotajkn = !empty($dokter_unit->batas) ? $dokter_unit->batas : 0;
-        $kuotanonjkn = !empty($dokter_unit->batas) ? $dokter_unit->batas : 0;
+        $total_antrian = $this->db->select('count(ID) as total')
+            ->like('tanggalperiksa', $tgl_antrian, 'both')
+            ->where('iddokter', $data['iddokter'])
+            ->where('kodepoli', $data['kodepoli'])
+            ->where('jampraktek',$data['jampraktek'])
+            ->where('status','1')
+            ->get('antrian_jkn')
+            ->first_row();
+        $antrian_total = $total_antrian->total;
+        $dokter = $this->db->select('*')
+            ->where('dokter',$data['iddokter'])
+            ->where('poli', $data['kodepoli'])
+            ->where("CONCAT_WS('-',awal,akhir)",$data['jampraktek'])
+            ->get('mr_jadwal_tetap')
+            ->first_row();
+        // $dokter = $this->db->get_where('mr_jadwal_tetap', ['dokter' => $data['iddokter'],'poli' => $data['kode']])->first_row();
+        $kuotajkn = !empty($dokter->batas) ? $dokter->batas : 0;
+        $kuotanonjkn = !empty($dokter->batas) ? $dokter->batas : 0;
         $set_kuota = array(
             'kuotajkn' => $kuotajkn,
-            'kuotanonjkn' => $kuotanonjkn,
+            'kuotanonjkn' => $kuotajkn,
             // 'SISAKUOTAJKN' => 100 - $antrian_total,
-            'sisajkn' => $kuotajkn,
-            'sisanonjkn' => $kuotajkn
+            'sisajkn' => $kuotanonjkn - $antrian_total,
+            'sisanonjkn' => $kuotanonjkn - $antrian_total
         );
 
         return $set_kuota;
