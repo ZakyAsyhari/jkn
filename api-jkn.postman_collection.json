@@ -163,22 +163,22 @@
 					"formdata": [
 						{
 							"key": "kodepoli",
-							"value": "01",
+							"value": "98",
 							"type": "text"
 						},
 						{
 							"key": "kodedokter",
-							"value": "10008 ",
+							"value": "11001",
 							"type": "text"
 						},
 						{
 							"key": "tanggalperiksa",
-							"value": "2021-12-18",
+							"value": "2021-12-28",
 							"type": "text"
 						},
 						{
 							"key": "jampraktek",
-							"value": "a",
+							"value": "14:00-21:00",
 							"type": "text"
 						}
 					]
@@ -194,6 +194,252 @@
 						"index.php",
 						"antrian",
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "antrian",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzOTEwMTM0MCwiZXhwIjoxNjQxNzMxMDg2fQ.jPaAXrdTtuJSw52v7LumQxEsmOMHJP6oiSjRhRE5PYk",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nomorkartu",
+							"value": "0008936746521",
+							"type": "text"
+						},
+						{
+							"key": "nik",
+							"value": "11014",
+							"type": "text"
+						},
+						{
+							"key": "norm",
+							"value": "11014",
+							"type": "text"
+						},
+						{
+							"key": "nohp",
+							"value": "98193289223",
+							"type": "text"
+						},
+						{
+							"key": "tanggalperiksa",
+							"value": "2021-12-28",
+							"type": "text"
+						},
+						{
+							"key": "kodepoli",
+							"value": "98",
+							"type": "text"
+						},
+						{
+							"key": "nomorreferensi",
+							"value": "3123",
+							"type": "text"
+						},
+						{
+							"key": "jeniskunjungan",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "kodedokter",
+							"value": "11001",
+							"type": "text"
+						},
+						{
+							"key": "jampraktek",
+							"value": "14:00-21:00",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/antrian",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"antrian"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sisa antrian",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzOTEwMTM0MCwiZXhwIjoxNjQxNzMxMDg2fQ.jPaAXrdTtuJSw52v7LumQxEsmOMHJP6oiSjRhRE5PYk",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/antrian/sisa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"antrian",
+						"sisa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "batal antrian",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzOTEwMTM0MCwiZXhwIjoxNjQxNzMxMDg2fQ.jPaAXrdTtuJSw52v7LumQxEsmOMHJP6oiSjRhRE5PYk",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"type": "text"
+						},
+						{
+							"key": "keterangan",
+							"value": "batal aja",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/antrian/batal_antrian",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"antrian",
+						"batal_antrian"
+					],
+					"query": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"disabled": true
+						},
+						{
+							"key": "keterangan",
+							"value": "batal aja",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzOTEwMTM0MCwiZXhwIjoxNjQxNzMxMDg2fQ.jPaAXrdTtuJSw52v7LumQxEsmOMHJP6oiSjRhRE5PYk",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"type": "text"
+						},
+						{
+							"key": "waktu",
+							"value": "1639069200000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/antrian/checkin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"antrian",
+						"checkin"
+					],
+					"query": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"disabled": true
+						},
+						{
+							"key": "keterangan",
+							"value": "batal aja",
+							"disabled": true
+						}
 					]
 				}
 			},

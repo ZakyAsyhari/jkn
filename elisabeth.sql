@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 10, 2021 at 10:56 AM
+-- Generation Time: Dec 10, 2021 at 08:20 PM
 -- Server version: 8.0.27-0ubuntu0.20.04.1
 -- PHP Version: 7.2.34-28+ubuntu20.04.1+deb.sury.org+1
 
@@ -79,7 +79,8 @@ CREATE TABLE `antrian_jkn` (
 --
 
 INSERT INTO `antrian_jkn` (`id`, `noantrian`, `kodepoli`, `nomorkartu`, `nik`, `notelp`, `tanggalperiksa`, `nomorreferensi`, `jenisreferensi`, `jenisrequest`, `polieksekutif`, `estimasidilayani`, `namapoli`, `status`, `tglinsert`, `iddokter`, `namadokter`, `keterangan`, `norm`, `checkin`, `jampraktek`, `jeniskunjungan`) VALUES
-(9, 1, '30', '0123456789123', '12342', '987193123', '2021-12-28', '3123', NULL, NULL, NULL, '1640667284000', 'GIGI', 1, '2021-12-10 03:54:44', 10103, 'YENNY MARIA, DRG', NULL, 10054, NULL, '08:00', 1);
+(15, 1, '98', '0123456789123', '12342', '987193123', '2021-12-28', '3123', NULL, NULL, NULL, '1640696116000', 'GV', 1, '2021-12-09 23:55:16', 11001, 'GV', NULL, 10054, NULL, '14:00-21:00', 1),
+(16, 1, '98', '0008936746521', '11014', '98193289223', '2021-12-28', '3123', NULL, NULL, NULL, '1640696508000', 'GV', 2, '2021-12-10 00:01:48', 11001, 'GV', NULL, 11014, '0000-00-00 00:00:00', '14:00-21:00', 1);
 
 -- --------------------------------------------------------
 
@@ -339,7 +340,7 @@ INSERT INTO `mr_jadwal_tetap` (`Id`, `dokter`, `poli`, `hari`, `waktu`, `awal`, 
 (3399, '10001      ', '28', 7, '8', '00:00', '07:00', 0, 0, '0         ', '                                                                                                                        ', 1, '2013-03-04', '2021-01-01 00:00:00', 'pde       '),
 (3400, '10042      ', '28', 4, '0', '07:00', '14:00', 0, 0, '0', '', 1, '2015-01-06', '2021-01-01 00:00:00', 'pde       '),
 (3401, '11001      ', '98', 4, '0', '07:00', '14:00', 0, 0, '0         ', '                                                                                                                        ', 1, '2015-01-01', '2021-01-01 00:00:00', 'pde       '),
-(3402, '11001      ', '98', 5, '4', '14:00', '21:00', 0, 0, '0', '', 1, '2015-01-08', '2021-01-01 00:00:00', 'pde       '),
+(3402, '11001      ', '98', 5, '4', '14:00', '21:00', 0, 100, '0', '', 1, '2015-01-08', '2021-01-01 00:00:00', 'pde       '),
 (3403, '11001      ', '98', 2, '0', '07:00', '14:00', 0, 0, '0         ', '                                                                                                                        ', 1, '2015-01-01', '2021-01-01 00:00:00', 'pde       '),
 (3404, '11001      ', '98', 3, '0', '07:00', '14:00', 0, 0, '0         ', '                                                                                                                        ', 1, '2015-01-01', '2021-01-01 00:00:00', 'pde       '),
 (3405, '11001      ', '98', 5, '0', '07:00', '14:00', 0, 0, '0         ', '                                                                                                                        ', 1, '2015-01-01', '2021-01-01 00:00:00', 'pde       '),
@@ -1076,7 +1077,7 @@ ALTER TABLE `ok_jadwal_operasi`
 -- AUTO_INCREMENT for table `antrian_jkn`
 --
 ALTER TABLE `antrian_jkn`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `mpoli`
