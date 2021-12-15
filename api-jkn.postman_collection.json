@@ -444,6 +444,189 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "vclaim-get-pasien",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImVsaXNhYmV0aCIsImlhdCI6MTYzOTEwMTM0MCwiZXhwIjoxNjQxNzMxMDg2fQ.jPaAXrdTtuJSw52v7LumQxEsmOMHJP6oiSjRhRE5PYk",
+						"type": "text"
+					},
+					{
+						"key": "x-username",
+						"value": "elisabeth",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nomorkartu",
+							"value": "1234567890121",
+							"type": "text"
+						},
+						{
+							"key": "nik",
+							"value": "3320081405970005",
+							"type": "text"
+						},
+						{
+							"key": "nomorkk",
+							"value": "3320081405970005",
+							"type": "text"
+						},
+						{
+							"key": "nama",
+							"value": "test test",
+							"type": "text"
+						},
+						{
+							"key": "jeniskelamin",
+							"value": "L",
+							"type": "text"
+						},
+						{
+							"key": "tanggallahir",
+							"value": "2002-03-01",
+							"type": "text"
+						},
+						{
+							"key": "nohp",
+							"value": "0897812309823",
+							"type": "text"
+						},
+						{
+							"key": "alamat",
+							"value": "jalan jalan ",
+							"type": "text"
+						},
+						{
+							"key": "kodeprop",
+							"value": "8721",
+							"type": "text"
+						},
+						{
+							"key": "namaprop",
+							"value": "jawa tengan",
+							"type": "text"
+						},
+						{
+							"key": "kodedati2",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "namadati2",
+							"value": "smg",
+							"type": "text"
+						},
+						{
+							"key": "kodekec",
+							"value": "1231",
+							"type": "text"
+						},
+						{
+							"key": "namakec",
+							"value": "kec kec",
+							"type": "text"
+						},
+						{
+							"key": "kodekel",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "namakel",
+							"value": "kel kel",
+							"type": "text"
+						},
+						{
+							"key": "rw",
+							"value": "04",
+							"type": "text"
+						},
+						{
+							"key": "rt",
+							"value": "11",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/pasien/baru",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"pasien",
+						"baru"
+					],
+					"query": [
+						{
+							"key": "kodebooking",
+							"value": "16",
+							"disabled": true
+						},
+						{
+							"key": "keterangan",
+							"value": "batal aja",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cari nik",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/cariPesertaBpjs/3320081404970005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"cariPesertaBpjs",
+						"3320081404970005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cari nokartu",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/carinokartu/0000093603778",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"carinokartu",
+						"0000093603778"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

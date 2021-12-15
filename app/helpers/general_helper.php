@@ -104,3 +104,38 @@ function validateInRangeDate($date_search, $range = 90, $format = 'Y-m-d')
 		// return 1;
 	}
 }
+
+function keybpjs($time)
+{
+    date_default_timezone_set('UTC');   
+    // $tStamp = strval(time() - strtotime('1970-01-01 00:00:00'));
+    $tStamp = $time;
+    $key = '231246dA1995F61' . $tStamp;
+    return $key;
+}
+
+function stringDecrypt($key, $string){
+            
+      
+	$encrypt_method = 'AES-256-CBC';
+
+	// hash
+	$key_hash = hex2bin(hash('sha256', $key));
+
+	// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+	$iv = substr(hex2bin(hash('sha256', $key)), 0, 16);
+
+	$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key_hash, OPENSSL_RAW_DATA, $iv);
+
+	return $output;
+}
+
+function decompress($string){
+  
+    return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
+
+}
+function fullDecompress($data,$time){  
+    $string = stringDecrypt(keybpjs($time),$data);
+    return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
+}
