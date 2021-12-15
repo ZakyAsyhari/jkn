@@ -385,8 +385,9 @@ class Antrian extends Rest
             } else {
 
                 $this->db->trans_start();
-
-                $timestamp = date('Y-m-d H:i:s', $input['waktu']);
+                $seconds = $input['waktu'] / 1000;
+                $timestamp = date('Y-m-d H:i:s', $seconds);
+                // print_r($timestamp); exit();
                 $this->db->update('antrian_jkn', ['status' => 2, 'checkin' => $timestamp], ['id' => $input['kodebooking']]);
 
                 $this->db->trans_complete();
