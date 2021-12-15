@@ -96,7 +96,7 @@ class Pasien extends Rest
 				// ]);
 
 				$this->response([
-					'response' => ['norm' => $penduduk->id],
+					'response' => ['norm' => $penduduk],
 					'metadata' => [
 						'message' => 'Harap datang ke admisi untuk melengkapi data rekam medis',
 						'code' 	  => 200

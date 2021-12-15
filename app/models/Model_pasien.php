@@ -8,7 +8,7 @@ class Model_pasien extends CI_Model
 	public function insert_pasien($input)
 	{
 
-		$lahir = date('d-M-Y', strtotime($input['tanggallahir']));
+		$lahir = $input['tanggallahir'];
 		$lahir = strtoupper($lahir);
 		$sex = $input['jeniskelamin'];
 		$nama_pengguna = str_replace("'", "", $input['nama']);
@@ -16,15 +16,22 @@ class Model_pasien extends CI_Model
 		$no_identitas = $input['nik'];
 
 		$new_rm = $this->db->select('max(lokal_id) as id')
+			->where('lokal_id > 0')
 			->get('mr_periksa')
 			->first_row();
-		return $new_rm;
-		print_r($new_rm);
-		exit();
 
-		$rm = $new_rm +1;
+		$id_per = $this->db->select('max(id) as id')
+			->get('mr_periksa')
+			->first_row();
+		// return $new_rm;
+		// print_r($new_rm);
+		// exit();
+		$new_id = $id_per->id + 1;
+
+		$rm = $new_rm->id +1;
 
 		$this->db->insert('mr_periksa', [
+			'id'		=> $new_id,
 			'nik' 		=> $input['nik'],
 			'lokal_id' 	=> $rm,
 			'id_user'	=> $rm,
@@ -35,9 +42,7 @@ class Model_pasien extends CI_Model
 			// 'nokk'  => $input['nomorkk']
 		]);
 
-		$penduduk = $this->db->select('max(id) as id')
-			->get('mr_periksa')
-			->first_row();
+
 		return $rm;
 	}
 
