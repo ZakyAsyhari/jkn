@@ -5,6 +5,9 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// $route['ws_bpjs']                   = 'ws_bpjs';
+
+
 $route['auth']['POST'] 				= 'rest/view_token';
 $route['login/gettoken']['POST'] 	= 'rest/gettoken';
 

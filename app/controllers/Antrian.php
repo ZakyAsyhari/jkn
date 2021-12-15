@@ -622,13 +622,13 @@ class Antrian extends Rest
 
             $this->response([
                 'response' => [
-                    'nomorantrean' => 'A' ,
+                    'nomorantrean' => $appointment->noantrian ,
                     'namapoli' => $appointment->namapoli,
                     'namadokter' => $appointment->namadokter,
-                    'sisaantrean' => $appointment->sisaantrian,
+                    'sisaantrean' => $sisah_antrian_min_1,
                     'antreanpanggil' => '',
                     'waktutunggu' => '',
-                    'keterangan' => ''
+                    'keterangan' => $appointment->keterangan
                 ],
                 'metadata' => [
                     'message' => 'Ok',

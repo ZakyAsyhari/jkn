@@ -25,6 +25,10 @@ class ComposerStaticInitd09ea596f21a214cd12b5ea3ff472179
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
         ),
+        'L' => 
+        array (
+            'LZCompressor\\' => 13,
+        ),
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
@@ -54,6 +58,10 @@ class ComposerStaticInitd09ea596f21a214cd12b5ea3ff472179
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'LZCompressor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nullpunkt/lz-string-php/src/LZCompressor',
         ),
         'Firebase\\JWT\\' => 
         array (
