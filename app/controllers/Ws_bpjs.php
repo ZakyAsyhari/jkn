@@ -10,8 +10,12 @@ class Ws_bpjs extends CI_Controller
 	var $keys			= 'bd5c6bfaf6d062a4a6f29012a050faeb';
 	var $kodeppk 		= '';
 	var $baseurl		= 'https://apijkn-dev.bpjs-kesehatan.go.id/vclaim-rest-dev/';
+	var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 	var $method			= array('cariPesertaBpjs' 	=> 'Peserta/nik/',
-								'carinokartu'		=> 'Peserta/nokartu/'
+								'carinokartu'		=> 'Peserta/nokartu/',
+								'refpoli'			=> 'ref/poli',
+								'refdokter'			=> 'ref/dokter',
+								'jadwaldokter'		=> 'jadwaldokter/kodepoli/'
 								);
 	var $debug= false;
 	public function construct()
@@ -56,16 +60,25 @@ class Ws_bpjs extends CI_Controller
 		return $this->baseurl.$availableMethod[$method];
 	}
 
+	public function getMethodhfis($method){
+
+		$availableMethod = $this->method;
+
+		if(!array_key_exists($method, $availableMethod)){
+			return false;
+		}
+
+		return $this->basehfis.$availableMethod[$method];
+	}
+
 	public function execute($url, $request=null, $method="GET"){
 		$headers = $this->generateHeader();
-		// print_r($headers);
-
-		// DEBUG PURPOSE
-		if($this->debug==true){
-			// show_array($headers);
-			// show_array($url);
-			// show_array(json_decode($request));
-		}
+		
+		// if($this->debug==true){
+		// 	// show_array($headers);
+		// 	// show_array($url);
+		// 	// show_array(json_decode($request));
+		// }
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -84,7 +97,7 @@ class Ws_bpjs extends CI_Controller
 		// exit();
 		if ($content === false) {
 			echo 'Curl error: ' . curl_error($ch);
-			// exit();
+			exit();
 		} else {
         	// echo 'Operation completed without any errors';
 			// exit();
@@ -94,7 +107,49 @@ class Ws_bpjs extends CI_Controller
 		$time['time']=$this->timestamp;
 		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
 		// print_r($merger_content);
-		$final_decode = $this->consFinal($merger_content);
+		$final_decode = consFinal($merger_content);
+
+		
+		return $final_decode;
+	}
+
+	public function executeHfis($url, $request=null, $method="GET"){
+		$headers = $this->generateHeader();
+		
+		// if($this->debug==true){
+		// 	// show_array($headers);
+		// 	// show_array($url);
+		// 	// show_array(json_decode($request));
+		// }
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+		if($request){
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $request );
+		}
+		$content = curl_exec($ch);
+		// print_r($content);
+		// exit();
+		if ($content === false) {
+			echo 'Curl error: ' . curl_error($ch);
+			exit();
+		} else {
+        	// echo 'Operation completed without any errors';
+			// exit();
+		}
+
+		curl_close($ch);
+		$time['time']=$this->timestamp;
+		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
+		// print_r($merger_content);
+		$final_decode = consFinalhFis($merger_content);
 
 		// DEBUG PURPOSE
 		// if($this->debug==true){
@@ -102,26 +157,6 @@ class Ws_bpjs extends CI_Controller
 		// 	dd(json_decode($final_decode));
 		// }
 		return $final_decode;
-	}
-
-	public function consFinal($response){
-		$data = json_decode($response, TRUE); 
-		if ($data['metaData']['code'] == 200) {
-			$dec = fullDecompress($data['response'],$data['time']);
-			if (empty($dec)) {
-				$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
-			} else {
-				$data['response'] = json_decode($dec);
-				$hasil = json_encode($data);
-
-			// print($hasil);
-			}
-		} else {
-			$hasil = $response;
-		}
-		// print_r($hasil)
-		header('Content-Type: application/json; charset=utf-8');
-		echo $hasil;
 	}
 
 
@@ -140,6 +175,18 @@ class Ws_bpjs extends CI_Controller
 
 		$url = $this->getMethod('carinokartu').$noka.'/tglSEP/'.$date;
 		return $this->execute($url);
+		
+	}
+
+	public function refpoli(){
+		$url = $this->getMethodhfis('refpoli');
+		return $this->executeHfis($url);
+		
+	}
+
+	public function refdokter(){
+		$url = $this->getMethodhfis('refdokter');
+		return $this->executeHfis($url);
 		
 	}
 }

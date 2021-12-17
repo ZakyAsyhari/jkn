@@ -139,3 +139,44 @@ function fullDecompress($data,$time){
     $string = stringDecrypt(keybpjs($time),$data);
     return \LZCompressor\LZString::decompressFromEncodedURIComponent($string);
 }
+
+
+function consFinal($response){
+	$data = json_decode($response, TRUE); 
+	if ($data['metaData']['code'] == 200) {
+		$dec = fullDecompress($data['response'],$data['time']);
+		if (empty($dec)) {
+			$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
+		} else {
+			$data['response'] = json_decode($dec);
+			$hasil = json_encode($data);
+
+		// print($hasil);
+		}
+	} else {
+		$hasil = $response;
+	}
+	// print_r($hasil)
+	header('Content-Type: application/json; charset=utf-8');
+	echo $hasil;
+}
+
+function consFinalhFis($response){
+	$data = json_decode($response, TRUE); 
+	if ($data['metadata']['message'] == 'OK') {
+		$dec = fullDecompress($data['response'],$data['time']);
+		if (empty($dec)) {
+			$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
+		} else {
+			$data['response'] = json_decode($dec);
+			$hasil = json_encode($data);
+
+		// print($hasil);
+		}
+	} else {
+		$hasil = $response;
+	}
+	// print_r($hasil)
+	header('Content-Type: application/json; charset=utf-8');
+	echo $hasil;
+}
