@@ -15,35 +15,40 @@ class Model_pasien extends CI_Model
 		$no_kk = $input['nomorkk'];
 		$no_identitas = $input['nik'];
 
-		$new_rm = $this->db->select('max(lokal_id) as id')
-			->where('lokal_id > 0')
-			->get('mr_periksa')
-			->first_row();
-
+		$new_rm = $this->db->select_max('rm')
+			->get('mmr')
+			->row();
+		
 		$id_per = $this->db->select('max(id) as id')
-			->get('mr_periksa')
+			->get('mmr')
 			->first_row();
-		// return $new_rm;
-		// print_r($new_rm);
-		// exit();
 		$new_id = $id_per->id + 1;
+		
+		$rm = (int)$new_rm->rm + 1;
+		$rmMasuk = norm($rm);
 
-		$rm = $new_rm->id +1;
-
-		$this->db->insert('mr_periksa', [
+		$this->db->insert('mmr', [
 			'id'		=> $new_id,
-			'nik' 		=> $input['nik'],
-			'lokal_id' 	=> $rm,
-			'id_user'	=> $rm,
-			'nm_user'	=> $input['nama'],
-			'jk' => $input['jeniskelamin'],
-			// 'GOL_DARAH'     => '',
-			'tgllahir' => $lahir
+			'rm'		=> norm($rm),
+			'nama'		=> $input['nama'],
+			// 'nik' 		=> $input['nik'],
+			// 'nokartu'	=> $input['nomorkartu'],
+			// 'nokk'		=> $input['nomorkk'],
+			'alamat'	=> $input['alamat'],
+			'hp'		=> $input['nohp'],
+			'jk'		=> $input['jeniskelamin'],
+			'tgllahir'	=> $input['tanggallahir'],
+			'propinsi'	=> $input['namaprop'],
+			'kabupaten'	=> $input['namadati2'],
+			'kecamatan'	=> $input['namakec'],
+			'kelurahan'	=> $input['namakel'],
+			'rt'		=> $input['rt'],
+			'rw'		=> $input['rw']
 			// 'nokk'  => $input['nomorkk']
 		]);
 
 
-		return $rm;
+		return $rmMasuk;
 	}
 
 	public function cek_pasien($nomorkartu)

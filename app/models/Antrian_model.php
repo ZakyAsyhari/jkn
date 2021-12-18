@@ -40,9 +40,9 @@ class Antrian_model extends CI_Model
 
         $sql = "SELECT *
                 from 
-                    mr_periksa
+                    mmr
                 where 
-                    lokal_id = '$norm'";
+                    rm = '$norm'";
         $data  = $this->db->query($sql)->row_array();
         return $data;
     }

@@ -15,7 +15,8 @@ class Ws_bpjs extends CI_Controller
 								'carinokartu'		=> 'Peserta/nokartu/',
 								'refpoli'			=> 'ref/poli',
 								'refdokter'			=> 'ref/dokter',
-								'jadwaldokter'		=> 'jadwaldokter/kodepoli/'
+								'jadwaldokter'		=> 'jadwaldokter/',
+
 								);
 	var $debug= false;
 	public function construct()
@@ -189,5 +190,17 @@ class Ws_bpjs extends CI_Controller
 		return $this->executeHfis($url);
 		
 	}
+
+	public function jadwaldokter(){
+		$kodepoli = $this->input->post('poli');
+		$tanggal = $this->input->post('tanggal');
+		// print_r($kodepoli);
+		// exit();
+
+		$url = $this->getMethodhfis('jadwaldokter');
+		return $this->executeHfis($url.'kodepoli/'.$kodepoli.'/tanggal/'.$tanggal);
+		
+	}
+
 }
 ?>

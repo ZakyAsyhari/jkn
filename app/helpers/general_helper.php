@@ -54,6 +54,29 @@ function noBPJS($value, $length = 13) {
     return $no;
 }
  
+
+function norm($value)
+{
+    $no = '';
+    $jml = strlen($value);
+    if ($jml == 1)
+        $no = "00000" . $value;
+    if ($jml == 2)
+        $no = "0000" . $value;
+    if ($jml == 3)
+        $no = "000" . $value;
+    if ($jml == 4)
+        $no = "00" . $value;
+    if ($jml == 5)
+        $no = "0" . $value;
+    if ($jml >= 6)
+        $no = $value;
+    if ($jml == 0)
+        $no = "000001";
+    return $no;
+}
+
+
 function validateFormatDate($date, $format = 'Y-m-d')
 {
 	$d = DateTime::createFromFormat($format, $date);
