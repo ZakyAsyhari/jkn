@@ -230,7 +230,7 @@
 						},
 						{
 							"key": "norm",
-							"value": "11014",
+							"value": "000251",
 							"type": "text"
 						},
 						{
@@ -306,7 +306,7 @@
 					"formdata": [
 						{
 							"key": "kodebooking",
-							"value": "16",
+							"value": "17",
 							"type": "text"
 						}
 					]
@@ -348,7 +348,7 @@
 					"formdata": [
 						{
 							"key": "kodebooking",
-							"value": "16",
+							"value": "17",
 							"type": "text"
 						},
 						{
@@ -412,7 +412,7 @@
 						},
 						{
 							"key": "waktu",
-							"value": "1639069200000",
+							"value": "1616559330000",
 							"type": "text"
 						}
 					]
@@ -446,7 +446,7 @@
 			"response": []
 		},
 		{
-			"name": "vclaim-get-pasien",
+			"name": "pasien baru",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -585,12 +585,12 @@
 			"response": []
 		},
 		{
-			"name": "cari nik",
+			"name": "Vlaim[cari nik]",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/cariPesertaBpjs/3320081404970005",
+					"raw": "http://localhost/api-jkn/index.php/vclaim/carinik/3320081404970005",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -598,8 +598,8 @@
 					"path": [
 						"api-jkn",
 						"index.php",
-						"ws_bpjs",
-						"cariPesertaBpjs",
+						"vclaim",
+						"carinik",
 						"3320081404970005"
 					]
 				}
@@ -607,12 +607,34 @@
 			"response": []
 		},
 		{
-			"name": "cari nokartu",
+			"name": "Vclaim[cari nokartu]",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/carinokartu/0000093603778",
+					"raw": "http://localhost/api-jkn/index.php/vclaim/carinokartu/0000093603778",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"vclaim",
+						"carinokartu",
+						"0000093603778"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[ref poli]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/refpoli",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -621,8 +643,273 @@
 						"api-jkn",
 						"index.php",
 						"ws_bpjs",
-						"carinokartu",
-						"0000093603778"
+						"refpoli"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[ref dokter]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/refdokter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"refdokter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[jadwaldokter]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "poli",
+							"value": "ANA",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2021-12-12",
+							"description": "format YYYY-MM-DD",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/jadwaldokter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"jadwaldokter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBbpjs[update jadwal dokter]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodepoli",
+							"value": "ANA",
+							"type": "text"
+						},
+						{
+							"key": "kodesubspesialis",
+							"value": "ANA",
+							"type": "text"
+						},
+						{
+							"key": "kodedokter",
+							"value": "9509",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[0][hari]",
+							"value": "1",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[0][buka]",
+							"value": "08:00",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[0][tutup]",
+							"value": "19:00",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[1][hari]",
+							"value": "2",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[1][buka]",
+							"value": "09:00",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						},
+						{
+							"key": "jadwal[1][tutup]",
+							"value": "12:00",
+							"description": "jadwal bentuk array",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/updatejadwaldokter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"updatejadwaldokter"
+					],
+					"query": [
+						{
+							"key": "kodepoli",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[list waktu task id]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/listwaktutask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"listwaktutask"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[dashboarpertanggal]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tanggal",
+							"value": "2021-12-12",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/dashboarpertanggal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"dashboarpertanggal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[dashboarperbulan]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "bulan",
+							"value": "01",
+							"type": "text"
+						},
+						{
+							"key": "tahun",
+							"value": "2021",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/batalantrian",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"batalantrian"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[batalantrian]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "bulan",
+							"value": "01",
+							"type": "text"
+						},
+						{
+							"key": "tahun",
+							"value": "2021",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/dashboarperbulan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"dashboarperbulan"
 					]
 				}
 			},

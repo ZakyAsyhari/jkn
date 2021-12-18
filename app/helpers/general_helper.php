@@ -1,5 +1,5 @@
 <?php
-
+$times = time();
 function debug($string)
 {
 	echo '<pre>';
@@ -130,7 +130,7 @@ function validateInRangeDate($date_search, $range = 90, $format = 'Y-m-d')
 
 function keybpjs($time)
 {
-    date_default_timezone_set('UTC');   
+    // date_default_timezone_set('UTC');   
     // $tStamp = strval(time() - strtotime('1970-01-01 00:00:00'));
     $tStamp = $time;
     $key = '231246dA1995F61' . $tStamp;
@@ -170,6 +170,7 @@ function consFinal($response){
 		$dec = fullDecompress($data['response'],$data['time']);
 		if (empty($dec)) {
 			$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
+			$hasil = json_encode($hasil);
 		} else {
 			$data['response'] = json_decode($dec);
 			$hasil = json_encode($data);
@@ -179,7 +180,7 @@ function consFinal($response){
 	} else {
 		$hasil = $response;
 	}
-	// print_r($hasil)
+	// print_r($hasil);exit();
 	header('Content-Type: application/json; charset=utf-8');
 	echo $hasil;
 }
@@ -190,6 +191,7 @@ function consFinalhFis($response){
 		$dec = fullDecompress($data['response'],$data['time']);
 		if (empty($dec)) {
 			$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
+			$hasil = json_encode($hasil);
 		} else {
 			$data['response'] = json_decode($dec);
 			$hasil = json_encode($data);
@@ -203,3 +205,36 @@ function consFinalhFis($response){
 	header('Content-Type: application/json; charset=utf-8');
 	echo $hasil;
 }
+
+function getMethod($method,$baseurl,$urlparams){
+
+	$availableMethod = $urlparams;
+
+	if(!array_key_exists($method, $availableMethod)){
+		return false;
+	}
+
+	return $baseurl.$availableMethod[$method];
+}
+
+function generateHeader($data) 
+	{
+		date_default_timezone_set('UTC');   
+		$tStamp = time();
+		$data['timestamp'] = $tStamp;
+		
+		$signature = hash_hmac('sha256', $data['consid']."&" . $tStamp, $data['secret'], true);
+		$encodedSignature = base64_encode($signature);
+		$data['signature'] = $encodedSignature;
+
+		$headers['head'] =[
+			"X-cons-id: " .$data['consid'],
+			"X-timestamp: " .$tStamp,
+			"X-signature: " .$encodedSignature,
+			"user_key: " .$data['keys']
+	];
+		$headers['time'] = $tStamp;
+	// print_r($headers);exit();
+
+		return $headers;
+	}
