@@ -42,7 +42,7 @@ class Antrian_model extends CI_Model
                 from 
                     mmr
                 where 
-                    rm = '$norm'";
+                    rm = $norm";
         $data  = $this->db->query($sql)->row_array();
         return $data;
     }
@@ -122,12 +122,12 @@ class Antrian_model extends CI_Model
         // $data['ESTIMASIDILAYANI']=strtotime(date('d-m-Y H:i:s'));;
 
         // generate no antrian 
-        $tanggalperiksa = $tgl->format('Y-m-d');
+        $tanggalperiksa = $data['tanggalperiksa'];
         $no_antrian = $this->db->query("SELECT max(noantrian)+1 as no,max(estimasidilayani) as estimasidilayani  from antrian_jkn where upper(kodepoli)=upper('$data[kodepoli]') and tanggalperiksa='$tanggalperiksa'")->row();
-        if (!empty($no_antrian->NO)) {
-            $estimasi = ($no_antrian->ESTIMASIDILAYANI + 3600) * 1000;
+        if (!empty($no_antrian->no)) {
+            $estimasi = ($no_antrian->estimasidilayani + 3600) * 1000;
             $data['estimasidilayani'] = $estimasi;
-            $data['noantrian'] = $no_antrian->NO;
+            $data['noantrian'] = $no_antrian->no;
         } else {
             $estimasi = $data['tanggalperiksa'] . ' ' . $jam_mulai;
             $data['noantrian'] = 1;

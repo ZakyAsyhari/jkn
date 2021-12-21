@@ -149,7 +149,7 @@ class Antrian extends Rest
                 $cek_pasien = $this->antrian->cek_pasien($data['norm']);
                 $cek_jadwal = $this->antrian->cek_waktu_daftar($data);
                 $reset_jadwal = $this->antrian->reset_jadwal($data);
-                $reset_jadwal['code'] = null;
+                // $reset_jadwal['code'] = null;
 
 
 
@@ -193,7 +193,7 @@ class Antrian extends Rest
                         'response' => null,
                         'metadata' => array(
                             'message'           => 'data antrian gagal dimasukkan',
-                            'cause'             => 'Jadwal Dokter ' . $reset_jadwal['nama'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
+                            'cause'             => 'Jadwal Dokter ' . $reset_jadwal['namadokter'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
                             'code'              => 202
                         ),
                     );
@@ -509,7 +509,7 @@ class Antrian extends Rest
                         'namadokter' => $dokter->nm_user,
                         'totalantrean' => $antrian_total,
                         'sisaantrean' => $sisa_antrian,
-                        'antreanpanggil' => '21',
+                        'antreanpanggil' => 'A-1',
                         'sisakuotajkn' => $kuota['sisajkn'],
                         'kuotajkn' => $kuota['kuotajkn'],
                         'sisakuotanonjkn' => $kuota['sisanonjkn'],
