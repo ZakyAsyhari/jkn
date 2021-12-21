@@ -116,9 +116,11 @@ class Rest extends REST_Controller
     //method untuk melihat token pada user
     public function gettoken_post()
     {
+        $headers = $this->input->request_headers();
+
         $date       = new DateTime();
-        $email      = $this->post('username');
-        $password   = $this->post('password');
+        $email      = $headers['x-username'];
+        $password   = md5($headers['x-password']);
         $get_member  = $this->login_model->member_is_valid($email);
         if ($get_member) {
             // if (password_verify($password, $get_member->password)) {
