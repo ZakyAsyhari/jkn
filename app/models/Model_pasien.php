@@ -32,7 +32,7 @@ class Model_pasien extends CI_Model
 			'rm'		=> norm($rm),
 			'nama'		=> $input['nama'],
 			// 'nik' 		=> $input['nik'],
-			// 'nokartu'	=> $input['nomorkartu'],
+			// 'nobpjs'	=> $input['nomorkartu'],
 			// 'nokk'		=> $input['nomorkk'],
 			'alamat'	=> $input['alamat'],
 			'hp'		=> $input['nohp'],
@@ -53,7 +53,7 @@ class Model_pasien extends CI_Model
 
 	public function cek_pasien($nomorkartu)
 	{
-		$pasien = $this->db->get_where('mr_periksa', ['nobpjs' => $nomorkartu])->first_row();
+		$pasien = $this->db->get_where('mmr', ['nobpjs' => $nomorkartu])->first_row();
 		return $pasien;
 	}
 }

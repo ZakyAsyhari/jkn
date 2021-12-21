@@ -42,7 +42,7 @@ class Operasiall extends Rest
         $data = array(
             'tanggalawal'    => $this->post('tanggalawal'),
             'tanggalakhir'   => $this->post('tanggalakhir'),
-            'kodepoli'       => $this->post('kodepoli'),
+            // 'kodepoli'       => $this->post('kodepoli'),
         );
 
         if ($this->jwt != 1) {
@@ -61,15 +61,15 @@ class Operasiall extends Rest
                     'code'              => 202
                 ),
             );
-        } elseif (empty($data['kodepoli'])) {
-            $output =  array(
-                'response' => null,
-                'metadata' => array(
-                    'message'           => 'Kodepoli Tidak Ditemukan',
-                    'cause'             => 'kode poli tidak sesuai atau null',
-                    'code'              => 202
-                ),
-            );
+        // } elseif (empty($data['kodepoli'])) {
+        //     $output =  array(
+        //         'response' => null,
+        //         'metadata' => array(
+        //             'message'           => 'Kodepoli Tidak Ditemukan',
+        //             'cause'             => 'kode poli tidak sesuai atau null',
+        //             'code'              => 202
+        //         ),
+        //     );
         } else {
 
             $data = $this->operasi->operasi_all($data);
