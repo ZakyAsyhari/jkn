@@ -6,15 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": null
-			},
-			"response": []
-		},
-		{
 			"name": "operasi- all",
 			"request": {
 				"method": "POST",
@@ -31,34 +22,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "tanggalawal",
-							"value": "2020-11-28",
-							"type": "text"
-						},
-						{
-							"key": "tanggalakhir",
-							"value": "2020-12-28",
-							"type": "text"
-						},
-						{
-							"key": "kodepoli",
-							"value": "ANA",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"tanggalawal\": \"2020-11-28\",\n    \"tanggalakhir\": \"2020-11-29\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/operasiall",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/operasiall",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"operasiall"
 					]
 				}
@@ -82,24 +60,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nopeserta",
-							"value": "00009887908",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"nopeserta\": \"00009887908\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/operasi",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/operasi",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"operasi"
 					]
 				}
@@ -127,14 +102,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/rest/gettoken",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/rest/gettoken",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"rest",
 						"gettoken"
 					]
@@ -159,39 +132,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "kodepoli",
-							"value": "98",
-							"type": "text"
-						},
-						{
-							"key": "kodedokter",
-							"value": "11001",
-							"type": "text"
-						},
-						{
-							"key": "tanggalperiksa",
-							"value": "2021-12-28",
-							"type": "text"
-						},
-						{
-							"key": "jampraktek",
-							"value": "14:00-21:00",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n   \"kodepoli\": \"ANA\",\n   \"kodedokter\": 11001,\n   \"tanggalperiksa\": \"2021-12-28\",\n   \"jampraktek\": \"14:00-21:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/antrian/status",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/antrian/status",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"antrian",
 						"status"
 					]
@@ -216,69 +171,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nomorkartu",
-							"value": "0008936746521",
-							"type": "text"
-						},
-						{
-							"key": "nik",
-							"value": "11014",
-							"type": "text"
-						},
-						{
-							"key": "norm",
-							"value": "000251",
-							"type": "text"
-						},
-						{
-							"key": "nohp",
-							"value": "98193289223",
-							"type": "text"
-						},
-						{
-							"key": "tanggalperiksa",
-							"value": "2021-12-28",
-							"type": "text"
-						},
-						{
-							"key": "kodepoli",
-							"value": "98",
-							"type": "text"
-						},
-						{
-							"key": "nomorreferensi",
-							"value": "3123",
-							"type": "text"
-						},
-						{
-							"key": "jeniskunjungan",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "kodedokter",
-							"value": "11001",
-							"type": "text"
-						},
-						{
-							"key": "jampraktek",
-							"value": "14:00-21:00",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"nomorkartu\": \"0001234567892\",\n    \"nik\": \"332008140497008\",\n    \"nohp\": \"98193289223\",\n    \"kodepoli\": \"ANA\",\n    \"norm\": \"000248\",\n    \"tanggalperiksa\": \"2021-12-28\",\n    \"kodedokter\": \"11001\",\n    \"jampraktek\": \"14:00-21:00\",\n    \"jeniskunjungan\": \"1\",\n    \"nomorreferensi\": \"0001R0040116A000002\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/antrian",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/antrian",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"antrian"
 					]
 				}
@@ -302,24 +209,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "kodebooking",
-							"value": "17",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"kodebooking\": \"24\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/antrian/sisa",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/antrian/sisa",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"antrian",
 						"sisa"
 					]
@@ -344,29 +248,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "kodebooking",
-							"value": "17",
-							"type": "text"
-						},
-						{
-							"key": "keterangan",
-							"value": "batal aja",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n   \"kodebooking\": \"20\",\n   \"keterangan\": \"Ada kebutuhan mendadak\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/antrian/batal_antrian",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/antrian/batal_antrian",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"antrian",
 						"batal_antrian"
 					],
@@ -403,29 +299,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "kodebooking",
-							"value": "16",
-							"type": "text"
-						},
-						{
-							"key": "waktu",
-							"value": "1616559330000",
-							"type": "text"
+					"mode": "raw",
+					"raw": "\n{\n    \"kodebooking\": \"24\",\n    \"waktu\": 1616559330000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/antrian/checkin",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/antrian/checkin",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"antrian",
 						"checkin"
 					],
@@ -462,109 +350,21 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nomorkartu",
-							"value": "1234567890121",
-							"type": "text"
-						},
-						{
-							"key": "nik",
-							"value": "3320081405970005",
-							"type": "text"
-						},
-						{
-							"key": "nomorkk",
-							"value": "3320081405970005",
-							"type": "text"
-						},
-						{
-							"key": "nama",
-							"value": "test test",
-							"type": "text"
-						},
-						{
-							"key": "jeniskelamin",
-							"value": "L",
-							"type": "text"
-						},
-						{
-							"key": "tanggallahir",
-							"value": "2002-03-01",
-							"type": "text"
-						},
-						{
-							"key": "nohp",
-							"value": "0897812309823",
-							"type": "text"
-						},
-						{
-							"key": "alamat",
-							"value": "jalan jalan ",
-							"type": "text"
-						},
-						{
-							"key": "kodeprop",
-							"value": "8721",
-							"type": "text"
-						},
-						{
-							"key": "namaprop",
-							"value": "jawa tengan",
-							"type": "text"
-						},
-						{
-							"key": "kodedati2",
-							"value": "12",
-							"type": "text"
-						},
-						{
-							"key": "namadati2",
-							"value": "smg",
-							"type": "text"
-						},
-						{
-							"key": "kodekec",
-							"value": "1231",
-							"type": "text"
-						},
-						{
-							"key": "namakec",
-							"value": "kec kec",
-							"type": "text"
-						},
-						{
-							"key": "kodekel",
-							"value": "12",
-							"type": "text"
-						},
-						{
-							"key": "namakel",
-							"value": "kel kel",
-							"type": "text"
-						},
-						{
-							"key": "rw",
-							"value": "04",
-							"type": "text"
-						},
-						{
-							"key": "rt",
-							"value": "11",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n   \"nomorkartu\": \"0001234567812\",\n   \"nik\": \"3212345678987654\",\n   \"nomorkk\": \"3212345678987654\",\n   \"nama\": \"sumarsono\",\n   \"jeniskelamin\": \"L\",\n   \"tanggallahir\": \"1985-12-01\",\n   \"nohp\": \"085635228888\",\n   \"alamat\": \"Jalan Pahlawan no.14\",\n   \"kodeprop\": \"11\",\n   \"namaprop\": \"Jawa Barat\",\n   \"kodedati2\": \"0120\",\n   \"namadati2\": \"Kab. Bandung\",\n   \"kodekec\": \"1319\",\n   \"namakec\": \"Soreang\",\n   \"kodekel\": \"2105\",\n   \"namakel\": \"Cingcin\",\n   \"rw\": \"001\",\n   \"rt\": \"013\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/pasien/baru",
-					"protocol": "http",
+					"raw": "{{baseurl}}index.php/pasien/baru",
 					"host": [
-						"localhost"
+						"{{baseurl}}index",
+						"php"
 					],
 					"path": [
-						"api-jkn",
-						"index.php",
 						"pasien",
 						"baru"
 					],
@@ -685,7 +485,7 @@
 						},
 						{
 							"key": "tanggal",
-							"value": "2021-12-12",
+							"value": "2021-08-07",
 							"description": "format YYYY-MM-DD",
 							"type": "text"
 						}
@@ -727,7 +527,7 @@
 						},
 						{
 							"key": "kodedokter",
-							"value": "9509",
+							"value": "12346",
 							"type": "text"
 						},
 						{
@@ -796,6 +596,10 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
 				"url": {
 					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/listwaktutask",
 					"protocol": "http",
@@ -852,12 +656,46 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "bulan",
+							"key": "kodebooking",
+							"value": "16",
+							"type": "text"
+						},
+						{
+							"key": "keterangan",
+							"value": "batal aja",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}index.php/ws_bpjs/batalantrian",
+					"host": [
+						"{{baseurl}}index",
+						"php"
+					],
+					"path": [
+						"ws_bpjs",
+						"batalantrian"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[batalantrian]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
 							"value": "01",
 							"type": "text"
 						},
 						{
-							"key": "tahun",
+							"key": "keterangan",
 							"value": "2021",
 							"type": "text"
 						}
@@ -880,7 +718,7 @@
 			"response": []
 		},
 		{
-			"name": "WsBpjs[batalantrian]",
+			"name": "WsBpjs[batalantrian] Copy",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -888,19 +726,19 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "bulan",
+							"key": "kodebooking",
 							"value": "01",
 							"type": "text"
 						},
 						{
-							"key": "tahun",
+							"key": "keterangan",
 							"value": "2021",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/dashboarperbulan",
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/batalantrian",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -909,7 +747,199 @@
 						"api-jkn",
 						"index.php",
 						"ws_bpjs",
-						"dashboarperbulan"
+						"batalantrian"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[update Waktu Antrean]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
+							"value": "16032021A001",
+							"type": "text"
+						},
+						{
+							"key": "taskid",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "waktu",
+							"value": "1616559330000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/updateantrian",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"updateantrian"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WsBpjs[Tambah Antrean]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "kodebooking",
+							"value": "16032021A001",
+							"type": "text"
+						},
+						{
+							"key": "jenispasien",
+							"value": "JKN",
+							"type": "text"
+						},
+						{
+							"key": "nomorkartu",
+							"value": "0001234567812",
+							"type": "text"
+						},
+						{
+							"key": "nik",
+							"value": "3212345678987654",
+							"type": "text"
+						},
+						{
+							"key": "nohp",
+							"value": "085635228888",
+							"type": "text"
+						},
+						{
+							"key": "kodepoli",
+							"value": "ANA",
+							"type": "text"
+						},
+						{
+							"key": "namapoli",
+							"value": "Anak",
+							"type": "text"
+						},
+						{
+							"key": "pasienbaru",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "norm",
+							"value": "123345",
+							"type": "text"
+						},
+						{
+							"key": "tanggalperiksa",
+							"value": "2021-01-28",
+							"type": "text"
+						},
+						{
+							"key": "kodedokter",
+							"value": "12345",
+							"type": "text"
+						},
+						{
+							"key": "namadokter",
+							"value": "Dr. Hendra",
+							"type": "text"
+						},
+						{
+							"key": "jampraktek",
+							"value": "08:00-16:00",
+							"type": "text"
+						},
+						{
+							"key": "jeniskunjungan",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "nomorreferensi",
+							"value": "0001R0040116A000001",
+							"type": "text"
+						},
+						{
+							"key": "nomorantrean",
+							"value": "A-12",
+							"type": "text"
+						},
+						{
+							"key": "angkaantrean",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "estimasidilayani",
+							"value": "1615869169000",
+							"type": "text"
+						},
+						{
+							"key": "sisakuotajkn",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "kuotajkn",
+							"value": "30",
+							"type": "text"
+						},
+						{
+							"key": "sisakuotanonjkn",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "kuotanonjkn",
+							"value": "30",
+							"type": "text"
+						},
+						{
+							"key": "keterangan",
+							"value": "Peserta harap 30 menit lebih awal guna pencatatan administrasi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api-jkn/index.php/ws_bpjs/tambahantrian?kodebooking&jenispasien",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api-jkn",
+						"index.php",
+						"ws_bpjs",
+						"tambahantrian"
+					],
+					"query": [
+						{
+							"key": "kodebooking",
+							"value": null
+						},
+						{
+							"key": "jenispasien",
+							"value": null
+						}
 					]
 				}
 			},

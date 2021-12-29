@@ -24,7 +24,9 @@ class Ws_bpjs extends CI_Controller
 								'listwaktutask'	 	=> 'antrean/getlisttask',
 								'updatejadwaldokter'=> 'jadwaldokter/updatejadwaldokter',
 								'dashboard'			=> 'dashboard/waktutunggu/',
-								'batalantrian'		=> 'antrean/batal'
+								'batalantrian'		=> 'antrean/batal',
+								'updateantrian'		=> 'antrean/updatewaktu',
+								'tambahantrian'		=> 'antrean/add'
 								);
 var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 	var $debug= false;
@@ -138,8 +140,80 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 			header('Content-Type: application/json; charset=utf-8');
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
 		}
+
+		$data =array("kodebooking" => "$kodebooking",
+					"keterangan" => "$keterangan");
+
+		$data = json_encode($data);
 		$url = getMethod('batalantrian',$this->basehfis,$this->method);
-		return $this->executeHfis($url);
+		// print_r($data);exit();
+		return $this->executeHfis($url,$data,"POST");
+	}
+
+
+	public function updateantrian(){
+		// print_r($this->input->post());exit();
+		$pesan = '';
+		$kodebooking 		= $this->input->post('kodebooking');
+		$taskid 			= $this->input->post('taskid');
+		$waktu 				= $this->input->post('waktu');
+
+		if(empty($kodebooking)){
+			$pesan = "Kode Booking Belum di isi";
+		}
+
+		if(empty($waktu)){
+			$pesan = "Waktu Belum di isi";
+		}
+		if(empty($taskid)){
+			$pesan = "Task Id Belum di isi";
+		}
+		if(!empty($pesan)){
+			header('Content-Type: application/json; charset=utf-8');
+			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
+		}
+
+		$data =array("kodebooking" => "$kodebooking",
+					"taskid" => "$taskid",
+					"waktu" => "$waktu");
+
+		$data = json_encode($data);
+		$url = getMethod('updateantrian',$this->basehfis,$this->method);
+		// print_r($data);exit();
+		return $this->executeHfis($url,$data,"POST");
+	}
+
+	public function tambahantrian(){
+		$data = array(
+			"kodebooking" => $this->input->post('kodebooking'),
+			"jenispasien"=> $this->input->post('jenispasien'),
+			"nomorkartu"=> $this->input->post('nomorkartu'),
+			"nik" => $this->input->post('nik'),
+			"nohp" => $this->input->post('nohp'),
+			"kodepoli" => $this->input->post('kodepoli'),
+			"namapoli" => $this->input->post('namapoli'),
+			"pasienbaru" => $this->input->post('pasienbaru'),
+			"norm" => $this->input->post('norm'),
+			"tanggalperiksa" => $this->input->post('tanggalperiksa'),
+			"kodedokter" => $this->input->post('kodedokter'),
+			"namadokter" => $this->input->post('namadokter'),
+			"jampraktek" => $this->input->post('jampraktek'),
+			"jeniskunjungan" => $this->input->post('jeniskunjungan'),
+			"nomorreferensi" => $this->input->post('nomorreferensi'),
+			"nomorantrean" => $this->input->post('nomorantrean'),
+			"angkaantrean"  => $this->input->post('angkaantrean'),
+			"estimasidilayani" => $this->input->post('estimasidilayani'),
+			"sisakuotajkn" => $this->input->post('sisakuotajkn'),
+			"kuotajkn" => $this->input->post('kuotajkn'),
+			"sisakuotanonjkn" => $this->input->post('sisakuotanonjkn'),
+			"kuotanonjkn" => $this->input->post('kuotanonjkn'),
+			"keterangan" => $this->input->post('keterangan')
+		 );
+		 $data = json_encode($data);
+		//  header('Content-Type: application/json; charset=utf-8');
+		//  die(json_encode($data));
+		$url = getMethod('tambahantrian',$this->basehfis,$this->method);
+		return $this->executeHfis($url,$data,"POST");
 	}
 
 	public function dashboarpertanggal(){
