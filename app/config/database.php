@@ -3,10 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $active_record = TRUE;
 // databse utama
-$db['default']['hostname'] = '192.168.119.1';
+$db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'psi';
-$db['default']['database'] = 'fastrspr';
+$db['default']['password'] = 'root';
+$db['default']['database'] = 'elisabet_core';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -21,11 +21,11 @@ $db['default']['stricton'] = FALSE;
 
 
 // database second (OK)
-$db['second']['hostname'] = '192.168.119.1';
+$db['second']['hostname'] = 'localhost';
 $db['second']['username'] = 'root';
-$db['second']['password'] = 'psi';
-$db['second']['database'] = 'elisabeth';
-$db['second']['dbdriver'] = 'oci8';
+$db['second']['password'] = 'root';
+$db['second']['database'] = 'elisabet_apps';
+$db['second']['dbdriver'] = 'mysqli';
 $db['second']['dbprefix'] = '';
 $db['second']['pconnect'] = TRUE;
 $db['second']['db_debug'] = TRUE;
