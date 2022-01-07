@@ -120,6 +120,18 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 	}
 
 	public function listWaktutask(){
+		$pesan = '';
+		$kodebooking 		= $this->input->post('kodebooking');
+
+		if(empty($kodebooking)){
+			$pesan = "Kode Booking Belum di isi";
+		}
+
+		if(!empty($pesan)){
+			header('Content-Type: application/json; charset=utf-8');
+			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
+		}
+
 		$url = getMethod('listwaktutask',$this->basehfis,$this->method);
 		return $this->executeHfis($url);
 	}

@@ -114,7 +114,7 @@ class Rest extends REST_Controller
     }
 
     //method untuk melihat token pada user
-    public function gettoken_post()
+    public function gettoken_get()
     {
         $headers = $this->input->request_headers();
 
