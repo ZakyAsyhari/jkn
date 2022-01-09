@@ -207,7 +207,7 @@ class Antrian extends Rest
 
                         $output = array(
                             'response'      => array(
-                                'nomorantrean'      => 'A-' . $return->noantrian,
+                                'nomorantrean'      => $return->noantrian,
                                 'angkaantrean'      => $return->noantrian,
                                 'kodeboking'        => $return->id,
                                 'norm'              => $return->norm,
@@ -218,7 +218,7 @@ class Antrian extends Rest
                                 'kuotajkn'          => (int)$kuota['kuotajkn'],
                                 'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
                                 'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
-                                'keterangan'        => 'Peserta harap 60 menit lebih awal guna pencatatan administrasi.'
+                                'keterangan'        => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
                             ),
                             'metadata'      => array(
                                 'message'       => 'Ok',

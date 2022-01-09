@@ -87,7 +87,7 @@ class Antrian_model extends CI_Model
                                                 and mr_j.hari = $days_num
                                                     and mr_j.kondisi = 1
                                                     and muser.lokal_id = $id_dokter
-                                            and upper(mp.poli)=upper('$data[kodepoli]')
+                                            and upper(mp.s_name)=upper('$data[kodepoli]')
                                         order by mr_j.dokter")->result_array();
 
             // print_r($get_polis);
@@ -125,13 +125,13 @@ class Antrian_model extends CI_Model
         $tanggalperiksa = $data['tanggalperiksa'];
         $no_antrian = $this->db->query("SELECT max(noantrian)+1 as no,max(estimasidilayani) as estimasidilayani  from antrian_jkn where upper(kodepoli)=upper('$data[kodepoli]') and tanggalperiksa='$tanggalperiksa'")->row();
         if (!empty($no_antrian->no)) {
-            $estimasi = ($no_antrian->estimasidilayani + 3600) * 1000;
+            $estimasi = ($no_antrian->estimasidilayani + 3600) * 100;
             $data['estimasidilayani'] = $estimasi;
             $data['noantrian'] = $no_antrian->no;
         } else {
             $estimasi = $data['tanggalperiksa'] . ' ' . $jam_mulai;
             $data['noantrian'] = 1;
-            $data['estimasidilayani'] = ((strtotime(date($estimasi))) + 3600) * 1000;
+            $data['estimasidilayani'] = ((strtotime(date($estimasi))) + 3600) * 100;
         }
 
         $data['tanggalperiksa'] = $tanggalperiksa;
@@ -158,7 +158,7 @@ class Antrian_model extends CI_Model
                                     join mpoli mp on mp.poli = mr_j.poli
                                     where mp.poli is not null 
                                         and mr_j.hari = $days_num
-                                        and upper(mp.poli)=upper('$data[kodepoli]')
+                                        and upper(mp.s_name)=upper('$data[kodepoli]')
                                         -- and kehadiran=1
                                     order by mr_j.dokter")->result_array();
 
@@ -192,7 +192,7 @@ class Antrian_model extends CI_Model
                                     where mpoli.poli is not null 
                                         and mr_j.hari = $days_num
                                         and '$time_now' between mr_j.awal and mr_j.akhir
-                                        and upper(mr_j.poli)=upper('$data[kodepoli]')
+                                        and upper(mpoli.s_name)=upper('$data[kodepoli]')
                                     order by mr_j.dokter")->result_array();
         // debug($get_polis);
         // die();
