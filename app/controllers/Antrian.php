@@ -149,7 +149,6 @@ class Antrian extends Rest
                 $cek_pasien = $this->antrian->cek_pasien($data['norm']);
                 $cek_jadwal = $this->antrian->cek_waktu_daftar($data);
                 $reset_jadwal = $this->antrian->reset_jadwal($data);
-                // $reset_jadwal['code'] = null;
 
 
 
@@ -467,39 +466,41 @@ class Antrian extends Rest
                 ], 200);
             } else {
                 # AMBIL DATA DOKTER
-                $dokter = $this->db->get_where('muser', ['lokal_Id' => $id_dokter])->first_row();
+                $dokter = $this->db->get_where('muser', ['id_extPass' => $id_dokter])->first_row();
 
                 # ambil data dokter unit
                 $data = array(
                     'tanggalperiksa' => $tanggal,
-                    'iddokter'       => $id_dokter,
-                    'kodepoli'           => $kode_poli,
+                    'iddokter'       => $dokter->id_user,
+                    'kodepoli'       => $kode_poli,
                     'jampraktek'      => $jam_praktek
                 );
                 $kuota = $this->antrian->set_kuota($data);
-                // $dokter_unit = $this->db->get_where('DOKTER_UNIT', ['ID_DOKTER' => $id_dokter])->first_row();
+                
 
                 # total antrian
-                // $total_antrian = $this->db->select('count(ID) as total')
-                //     ->like('', $tgl_antrian, 'both')
-                //     ->where('lokal_id', $data['iddokter'])
-                //     ->where('status','1')
-                //     ->get('mr_periksa')
-                //     ->first_row();
 
-                    $total_antrian = $this->db->select('count(ID) as total')
-                                    ->like('tanggalperiksa', $data['tanggalperiksa'], 'both')
-                                    ->where('iddokter', $data['iddokter'])
-                                    ->where('kodepoli', $data['kodepoli'])
-                                    ->where('jampraktek',$data['jampraktek'])
-                                    ->where('status','1')
-                                    ->get('antrian_jkn')
-                                    ->first_row();
+                $total_antrian = $this->db->select('count(id) as total')
+                                ->like('tanggalperiksa', $data['tanggalperiksa'], 'both')
+                                ->where('iddokter', $data['iddokter'])
+                                ->where('kodepoli', $data['kodepoli'])
+                                ->where('jampraktek',$data['jampraktek'])
+                                ->where('status','2')
+                                ->get('antrian_jkn')
+                                ->first_row();
                     // print_r($total_antrian);
                 $antrian_total = $total_antrian->total;
                 $sisa_antrian = $kuota['kuotajkn'] - $total_antrian->total;
 
                 # data estimasi antrian
+                $apnggil = $this->db->select('max(noantrian) as panggil')
+                                    ->like('tanggalperiksa', $data['tanggalperiksa'], 'both')
+                                    ->where('iddokter', $data['iddokter'])
+                                    ->where('kodepoli', $data['kodepoli'])
+                                    ->where('jampraktek',$data['jampraktek'])
+                                    ->where('status','2')
+                                    ->get('antrian_jkn')
+                                    ->first_row();
                 
                 #end
 
@@ -509,7 +510,7 @@ class Antrian extends Rest
                         'namadokter' => $dokter->nm_user,
                         'totalantrean' => $antrian_total,
                         'sisaantrean' => $sisa_antrian,
-                        'antreanpanggil' => 'A-1',
+                        'antreanpanggil' => $apnggil->panggil,
                         'sisakuotajkn' => $kuota['sisajkn'],
                         'kuotajkn' => $kuota['kuotajkn'],
                         'sisakuotanonjkn' => $kuota['sisanonjkn'],
@@ -521,25 +522,6 @@ class Antrian extends Rest
                         'code' => 200
                     ]
                 ], 200);
-
-                // $this->response([
-                //     'response' => [
-                //         'namapoli' => $poli->nama,
-                //         'namadokter' => $dokter->nm_user,
-                //         'totalantrean' => '100',
-                //         'sisaantrean' => '100',
-                //         'antreanpanggil' => 'A-21',
-                //         'sisakuotajkn' => '100',
-                //         'kuotajkn' => '100',
-                //         'sisakuotanonjkn' => '100',
-                //         'kuotanonjkn' => '100',
-                //         'keterangan' => ''
-                //     ],
-                //     'metadata' => [
-                //         'message' => 'Ok',
-                //         'code' => 200
-                //     ]
-                // ], 200);
 
             }
         }
@@ -619,7 +601,13 @@ class Antrian extends Rest
                 $sisah_antrian_min_1;
             }
 
-            $waktu_antrian = strtotime($appointment->tanggalperiksa);
+            $waktu_antrian = ($appointment->estimasidilayani / 1000);
+            #panggil antrian terakhir 
+            $panggil = $this->db->select('max(noantrian) as panggil')
+                                    ->like('tanggalperiksa', $appointment->tanggalperiksa, 'both')
+                                    ->where('STATUS', 2)
+                                    ->get('antrian_jkn')
+                                    ->first_row();
 
             $this->response([
                 'response' => [
@@ -627,8 +615,8 @@ class Antrian extends Rest
                     'namapoli' => $appointment->namapoli,
                     'namadokter' => $appointment->namadokter,
                     'sisaantrean' => $sisah_antrian_min_1,
-                    'antreanpanggil' => '',
-                    'waktutunggu' => '',
+                    'antreanpanggil' => $panggil->panggil,
+                    'waktutunggu' => $waktu_antrian,
                     'keterangan' => $appointment->keterangan
                 ],
                 'metadata' => [
