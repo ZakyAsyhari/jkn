@@ -453,7 +453,7 @@ class Antrian extends Rest
         } else {
 
             # ambil data poli
-            $poli = $this->db->get_where('mpoli', ['poli' => $kode_poli])->first_row();
+            $poli = $this->db->get_where('mpoli', ['s_name' => $kode_poli])->first_row();
             // print_r($poli);
             // exit();
 
