@@ -16,21 +16,8 @@ class Antrian_model extends CI_Model
 
         $tgl_sekarang = date('Y-m-d');
 
-        $sql = "SELECT 
-                    id,
-                    kodepoli,
-                    nomorkartu,
-                    nik,
-                    tanggalperiksa,
-                    tglinsert
-                from 
-                    antrian_jkn
-                where 
-                    nik = '$nik'
-                and
-                    status in (1,2) 
-                and
-                    tglinsert = '$tgl_sekarang'";
+        $sql = "SELECT id,kodepoli,nomorkartu,nik,tanggalperiksa,tglinsert
+                from antrian_jkn where nik = '$nik' and status in (1,2) and tglinsert = '$tgl_sekarang'";
         $data  = $this->db->query($sql)->row_array();
         return $data;
     }
@@ -79,7 +66,7 @@ class Antrian_model extends CI_Model
 
 
         // GET data Poli
-        $get_polis = $this->db->query("SELECT mp.nama,mp.poli,muser.lokal_id as iddokter,muser.nm_user as dokter,mr_j.kondisi as kehadiran
+        $get_polis = $this->db->query("SELECT mp.nama,mp.poli,muser.lokal_id as iddokter,muser.nm_user as dokter,mr_j.kondisi as kehadiran,muser.nik
                                         from mr_jadwal_tetap as mr_j
                                         join muser on muser.lokal_id = mr_j.dokter
                                         join mpoli mp on mp.poli = mr_j.poli
@@ -98,6 +85,7 @@ class Antrian_model extends CI_Model
         }
         $jadwal_nama_poli   = isset($get_poli) ? $get_poli['nama'] : null;
         $idPoli             = isset($get_poli) ? $get_poli['poli'] : null;
+        $idDokterrs         = isset($get_poli) ? $get_poli['nik'] : null;
 
         $data['namapoli']   = isset($get_poli) ? $get_poli['nama'] : null;
         $data['namadokter'] = isset($get_poli) ? $get_poli['dokter'] : null;
@@ -113,7 +101,10 @@ class Antrian_model extends CI_Model
 
         // generate no antrian 
         $tanggalperiksa = $data['tanggalperiksa'];
-        $no_antrian = $this->db->query("SELECT max(noantrian)+1 as no,max(estimasidilayani) as estimasidilayani  from antrian_jkn where upper(kodepoli)=upper('$data[kodepoli]') and tanggalperiksa='$tanggalperiksa'")->row();
+        $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
+                                        from mr_periksa
+                                        left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
+                                        where upper(mr_periksa.poli)=upper('$idPoli') and mr_periksa.tglperiksa='$tanggalperiksa'")->row();
         if (!empty($no_antrian->no)) {
             $estimasi = (int)$no_antrian->estimasidilayani + (3600 * 100);
             $data['estimasidilayani'] = $estimasi;
@@ -129,6 +120,17 @@ class Antrian_model extends CI_Model
         $data['tglinsert'] = date('Y-m-d h:i:s');
 
         $this->db->insert($this->table, $data);
+        $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
+        $insPeriksa = array( 'id'           => $newid->id,
+                             'tanggal'      => date('Y-m-d'),
+                             'poli'         => $idPoli,
+                             'rm'           => $data['norm'],
+                             'kode_dok'     => $idDokterrs,
+                             'nourut'       => $data['noantrian'],
+                             'tgldaftar'    => date('Y-m-d H:i:s'),
+                             'tglperiksa'   => $data['tanggalperiksa']
+    );
+        $this->db->insert('mr_periksa', $insPeriksa);
         $return = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
 
         $solve = array('id' => $return->id, 'code' => '1');
@@ -144,7 +146,7 @@ class Antrian_model extends CI_Model
 
         $get_polis = $this->db->query("SELECT MAX(mr_j.akhir) as jamselesai, MAX(mp.nama) as nama 
                                     from mr_jadwal_tetap as mr_j
-                                    join muser on muser.lokal_id = mr_j.dokter
+                                    join muser on muser.nik = mr_j.dokter
                                     join mpoli mp on mp.poli = mr_j.poli
                                     where mp.s_name is not null 
                                         and mr_j.hari = $days_num
@@ -174,14 +176,16 @@ class Antrian_model extends CI_Model
         $date_time_now = date('d-m-Y H:i:s');
         $date_now = date('d-m-Y');
         $days_num = no_hari($days_now);
-
+        // debug($days_num);
         $get_polis = $this->db->query("SELECT mr_j.kondisi as kehadiran,mr_j.hari,muser.nm_user as dokter
                                     from mr_jadwal_tetap as mr_j
-                                    join muser on muser.lokal_id = mr_j.dokter
+                                    join muser on muser.nik = mr_j.dokter
                                     join mpoli on mpoli.poli = mr_j.poli
                                     where mpoli.s_name is not null 
                                         and mr_j.hari = $days_num
-                                        and '$time_now' between mr_j.awal and mr_j.akhir
+                                        and '$time_now' between trim(mr_j.awal) and trim(mr_j.akhir) 
+                                        and muser.id_extPass = $data[iddokter]
+                                        and CONCAT_WS('-',mr_j.awal,mr_j.akhir) = '$data[jampraktek]'
                                         and upper(mpoli.s_name)=upper('$data[kodepoli]')
                                     order by mr_j.dokter")->result_array();
         // debug($get_polis);
@@ -218,19 +222,24 @@ class Antrian_model extends CI_Model
         $tgl_antrian = strtoupper($tgl_antrian);
 
         # total antrian
-        $total_antrian = $this->db->select('count(ID) as total')
-            ->like('tanggalperiksa', $tgl_antrian, 'both')
-            ->where('iddokter', $data['iddokter'])
-            ->where('kodepoli', $data['kodepoli'])
-            ->where('jampraktek',$data['jampraktek'])
-            ->where('status','1')
-            ->get('antrian_jkn')
+        $total_antrian = $this->db->select('count(mr_p.ID) as total')
+            ->from('mr_periksa mr_p')
+            ->join('muser','muser.nik = mr_p.kode_dok')
+            ->join('mr_jadwal_tetap mr_j','mr_j.dokter = muser.nik')
+            ->join('mpoli','mpoli.poli = mr_j.poli')
+            ->like('mr_p.tglperiksa', $tgl_antrian, 'both')
+            ->where('muser.id_extPass', $data['iddokter'])
+            ->where('mpoli.s_name', $data['kodepoli'])
+            ->where("CONCAT_WS('-',mr_j.awal,mr_j.akhir)",$data['jampraktek'])
+            // ->where('status','1')
+            ->get()
             ->first_row();
         $antrian_total = $total_antrian->total;
         $dokter = $this->db->select('mr_jadwal_tetap.*')
             ->from('mr_jadwal_tetap')
             ->join('mpoli','mpoli.poli=mr_jadwal_tetap.poli')
-            ->where('mr_jadwal_tetap.dokter',$data['iddokter'])
+            ->join('muser','muser.nik=mr_jadwal_tetap.dokter')
+            ->where('muser.id_extPass',$data['iddokter'])
             ->where('mr_jadwal_tetap.hari',$getdays)
             ->where('mpoli.s_name', $data['kodepoli'])
             ->where("CONCAT_WS('-',mr_jadwal_tetap.awal,mr_jadwal_tetap.akhir)",$data['jampraktek'])

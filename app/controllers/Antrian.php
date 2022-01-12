@@ -196,6 +196,15 @@ class Antrian extends Rest
                             'code'              => 202
                         ),
                     );
+                }else if ($reset_jadwal['code'] == 10) {
+                    // Pendaftaran ke Poli Ini Sedang Tutup
+                    $output =  array(
+                        'response' => null,
+                        'metadata' => array(
+                            'message'   => 'Pendaftaran ke Poli Ini Sedang Tutup',
+                            'code'      => 202
+                        ),
+                    );
                 } else {
 
                     $solve = $this->antrian->antrian_insert($data);
@@ -471,7 +480,7 @@ class Antrian extends Rest
                 # ambil data dokter unit
                 $data = array(
                     'tanggalperiksa' => $tanggal,
-                    'iddokter'       => $dokter->id_user,
+                    'iddokter'       => $id_dokter,
                     'kodepoli'       => $kode_poli,
                     'jampraktek'      => $jam_praktek
                 );
@@ -480,14 +489,18 @@ class Antrian extends Rest
 
                 # total antrian
 
-                $total_antrian = $this->db->select('count(id) as total')
-                                ->like('tanggalperiksa', $data['tanggalperiksa'], 'both')
-                                ->where('iddokter', $data['iddokter'])
-                                ->where('kodepoli', $data['kodepoli'])
-                                ->where('jampraktek',$data['jampraktek'])
-                                ->where('status','2')
-                                ->get('antrian_jkn')
-                                ->first_row();
+                $total_antrian = $this->db->select('count(mr_p.ID) as total')
+                                            ->from('mr_periksa mr_p')
+                                            ->join('muser','muser.nik = mr_p.kode_dok')
+                                            ->join('mr_jadwal_tetap mr_j','mr_j.dokter = muser.nik')
+                                            ->join('mpoli','mpoli.poli = mr_j.poli')
+                                            ->like('mr_p.tglperiksa', $data['tanggalperiksa'], 'both')
+                                            ->where('muser.id_extPass', $data['iddokter'])
+                                            ->where('mpoli.s_name', $data['kodepoli'])
+                                            ->where("CONCAT_WS('-',mr_j.awal,mr_j.akhir)",$data['jampraktek'])
+                                            // ->where('status','1')
+                                            ->get()
+                                            ->first_row();
                     // print_r($total_antrian);
                 $antrian_total = $total_antrian->total;
                 $sisa_antrian = $kuota['kuotajkn'] - $total_antrian->total;
