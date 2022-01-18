@@ -39,7 +39,7 @@ class Antrian extends Rest
 
     public function index_post()
     {
-        $date       = new DateTime();
+        // $date       = new DateTime();
         $data = array(
             'nomorkartu'        => $this->post('nomorkartu'),
             'nik'               => $this->post('nik'),
@@ -62,7 +62,7 @@ class Antrian extends Rest
         $keys_length    = null;
         foreach ($data as $key => $value) {
             if ($value == '' || $value == null) {
-                if ($key == 'nomorkartu' || $key == 'tanggalperiksa') {
+                if ($key == 'nomorkartu' || $key == 'tanggalperiksa' || $key == 'jampraktek') {
                     $keys_kosong = $key;
                     break;
                 }
@@ -74,11 +74,12 @@ class Antrian extends Rest
                 }
             }
 
-            // if ($key == 'jenisrequest') {
-            //     if ($value != 1 && $value != 2) {
-            //         $keys_kosong = $key;
-            //     }
-            // }
+            if ($key == 'jampraktek') {
+                if (validTime($value) == false) {
+                    $keys_kosong = $key;
+                }
+            }
+
             if ($key == 'jeniskunjungan') {
                 if ($value != 1 && $value != 2) {
                     $keys_kosong = $key;
@@ -436,6 +437,8 @@ class Antrian extends Rest
             $pesan_gagal = "tanggal tidak boleh kosong";
         } else if (empty($jam_praktek)) {
             $pesan_gagal = "Jam praktek tidak boleh kosong";
+        }else if(validTime($jam_praktek) == false){
+            $pesan_gagal = "Jam praktek Tidak Sesuai";
         } else if (!validateFormatDate($tanggal)) {
             $pesan_gagal = "Format Tanggal Tidak Sesuai, format yang benar adalah yyyy-mm-dd";
         } else if (validateBackDate($tanggal)) {
@@ -466,7 +469,7 @@ class Antrian extends Rest
             // exit();
 
             if (empty($poli)) {
-                $this->response([
+                return $this->response([
                     // 'response' => null,
                     'metadata' => [
                         'message' => "Poli Tidak Ditemukan",
@@ -476,7 +479,15 @@ class Antrian extends Rest
             } else {
                 # AMBIL DATA DOKTER
                 $dokter = $this->db->get_where('muser', ['id_extPass' => $id_dokter])->first_row();
-
+                if (empty($dokter)) {
+                    return $this->response([
+                        'response' => null,
+                        'metadata' => [
+                            'message' => "Dokter Tidak Ditemukan",
+                            'code' => 201
+                        ]
+                    ], 200);
+                }
                 # ambil data dokter unit
                 $data = array(
                     'tanggalperiksa' => $tanggal,

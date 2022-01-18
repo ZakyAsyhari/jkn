@@ -142,31 +142,35 @@ class Antrian_model extends CI_Model
     {
         $days_now = date("D", strtotime(date('Y-m-d', strtotime($data['tanggalperiksa']))));
         $date_time_now = date('d-m-Y H:i:s');
+        $dates_now = date('Y-m-d');
         $days_num = no_hari($days_now);
 
-        $get_polis = $this->db->query("SELECT MAX(mr_j.akhir) as jamselesai, MAX(mp.nama) as nama 
+        $get_polis = $this->db->query("SELECT mr_j.akhir as jamselesai,mp.nama as nama 
                                     from mr_jadwal_tetap as mr_j
                                     join muser on muser.nik = mr_j.dokter
                                     join mpoli mp on mp.poli = mr_j.poli
                                     where mp.s_name is not null 
                                         and mr_j.hari = $days_num
                                         and upper(mp.s_name)=upper('$data[kodepoli]')
+                                        and muser.id_extPass = $data[iddokter]
+                                        and CONCAT_WS('-',ltrim(mr_j.awal),ltrim(mr_j.akhir)) = '$data[jampraktek]'
                                         -- and kehadiran=1
                                     order by mr_j.dokter")->result_array();
 
-        $random_keys    = array_rand($get_polis, 1);
-        $get_poli       = $get_polis[$random_keys];
-
-        // if (isset($get_poli['JAMSELESAI'])) {
-        $batas_regist   = date('H:i:s', strtotime($get_poli['jamselesai']));
-        $jam_regist     = date('H:i:s', strtotime($date_time_now));
-        if ($jam_regist > $batas_regist) {
-            $cek_jadwal = array('code' => '9');
-            $cek_jadwal['jam'] = date('g:i a', strtotime($batas_regist));
-            $cek_jadwal['namapoli'] = isset($get_poli) ? $get_poli['nama'] : null;
-            return $cek_jadwal;
-        }
-        // } 
+        if (!empty($get_polis)) {
+            $random_keys    = array_rand($get_polis, 1);
+            $get_poli       = $get_polis[$random_keys];
+            $batas_regist   = date('H:i:s', strtotime($get_poli['jamselesai']));
+            $jam_regist     = date('H:i:s', strtotime($date_time_now));
+            if ($jam_regist > $batas_regist and $data['tanggalperiksa'] == $dates_now) {
+                $cek_jadwal = array('code' => '9');
+                $cek_jadwal['jam'] = date('g:i a', strtotime($batas_regist));
+                $cek_jadwal['namapoli'] = isset($get_poli) ? $get_poli['nama'] : null;
+                return $cek_jadwal;
+            }
+        }else{
+            $cek_jadwal = array('code' => '10');
+        } 
     }
 
     public function reset_jadwal($data)
@@ -174,8 +178,12 @@ class Antrian_model extends CI_Model
         $days_now = date("D", strtotime(date('Y-m-d', strtotime($data['tanggalperiksa']))));
         $time_now = date('H:i');
         $date_time_now = date('d-m-Y H:i:s');
-        $date_now = date('d-m-Y');
+        $date_now = date('Y-m-d');
         $days_num = no_hari($days_now);
+        $where = "";
+        if($data['tanggalperiksa'] == $date_now){
+            $where .= " and '$time_now' between trim(mr_j.awal) and trim(mr_j.akhir)  ";
+        }
         // debug($days_num);
         $get_polis = $this->db->query("SELECT mr_j.kondisi as kehadiran,mr_j.hari,muser.nm_user as dokter
                                     from mr_jadwal_tetap as mr_j
@@ -183,7 +191,7 @@ class Antrian_model extends CI_Model
                                     join mpoli on mpoli.poli = mr_j.poli
                                     where mpoli.s_name is not null 
                                         and mr_j.hari = $days_num
-                                        and '$time_now' between trim(mr_j.awal) and trim(mr_j.akhir) 
+                                        $where
                                         and muser.id_extPass = $data[iddokter]
                                         and CONCAT_WS('-',mr_j.awal,mr_j.akhir) = '$data[jampraktek]'
                                         and upper(mpoli.s_name)=upper('$data[kodepoli]')
@@ -194,13 +202,14 @@ class Antrian_model extends CI_Model
             $random_keys    = array_rand($get_polis, 1);
             $get_poli       = $get_polis[$random_keys];
 
-            if ($get_poli['kehadiran'] == 0) {
-                $reset_jadwal = array('code' => 7);
-                $reset_jadwal['namadokter'] = isset($get_poli) ? $get_poli['dokter'] : null;
-                return $reset_jadwal;
-            }
+            // if ($get_poli['kehadiran'] == 0) {
+            //     $reset_jadwal = array('code' => 7);
+            //     $reset_jadwal['namadokter'] = isset($get_poli) ? $get_poli['dokter'] : null;
+            //     return $reset_jadwal;
+            // }
         } else {
-            $cek_jadwal = array('code' => 10);
+            $cek_jadwal = array('code' => 7,
+                                'namadokter' => isset($get_poli) ? $get_poli['dokter'] : null);
             return $cek_jadwal;
         }
     }
