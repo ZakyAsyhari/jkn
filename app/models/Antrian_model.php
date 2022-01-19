@@ -122,13 +122,18 @@ class Antrian_model extends CI_Model
         $this->db->insert($this->table, $data);
         $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
         $insPeriksa = array( 'id'           => $newid->id,
+                             'waktu'        => '0',
                              'tanggal'      => date('Y-m-d'),
                              'poli'         => $idPoli,
                              'rm'           => $data['norm'],
                              'kode_dok'     => $idDokterrs,
                              'nourut'       => $data['noantrian'],
                              'tgldaftar'    => date('Y-m-d H:i:s'),
-                             'tglperiksa'   => $data['tanggalperiksa']
+                             'tglkeluarmr'  => '0000-00-00 00:00:00',
+                             'tglkembalimr' => '0000-00-00 00:00:00',
+                             'ambil'        => '0000-00-00 00:00:00',
+                             'tglperiksa'   => $data['tanggalperiksa'],
+                             'tglclose'     => '0000-00-00 00:00:00'
     );
         $this->db->insert('mr_periksa', $insPeriksa);
         $return = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
