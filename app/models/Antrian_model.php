@@ -118,7 +118,7 @@ class Antrian_model extends CI_Model
         $data['tanggalperiksa'] = $tanggalperiksa;
         $data['status'] = 1;
         $data['tglinsert'] = date('Y-m-d h:i:s');
-
+        $this->db->trans_start();
         $this->db->insert($this->table, $data);
         $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
         $insPeriksa = array( 'id'           => $newid->id,
@@ -130,15 +130,20 @@ class Antrian_model extends CI_Model
                              'nourut'       => $data['noantrian'],
                              'tgldaftar'    => date('Y-m-d H:i:s'),
                              'tglkeluarmr'  => '0000-00-00 00:00:00',
-                             'tglkembalimr' => '0000-00-00 00:00:00',
+                             'tglkembalimr' => '0000-00-00 aa:00:00',
                              'ambil'        => '0000-00-00 00:00:00',
                              'tglperiksa'   => $data['tanggalperiksa'],
                              'tglclose'     => '0000-00-00 00:00:00'
     );
         $this->db->insert('mr_periksa', $insPeriksa);
-        $return = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
-
-        $solve = array('id' => $return->id, 'code' => '1');
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === false) {
+            $solve = array('code' => '3');            
+        }else{
+            $return = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
+            $solve = array('id' => $return->id, 'code' => '1');
+        }
+        
         return $solve;
     }
 
