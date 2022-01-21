@@ -117,7 +117,7 @@ class Antrian extends Rest
                         'message'           => 'data antrian gagal dimasukkan',
                         'cause'             => 'format tanggal salah atau backdate',
                         'column'            => strtolower($keys_tgl),
-                        'code'              => 202
+                        'code'              => 201
                     ),
                 );
             } else if ($keys_range != null) {
@@ -128,7 +128,7 @@ class Antrian extends Rest
                         'message'           => 'data antrian gagal dimasukkan',
                         'cause'             => 'tanggal antrian yang diminta melebihi 90 hari',
                         'column'            => strtolower($keys_range),
-                        'code'              => 202
+                        'code'              => 201
                     ),
                 );
             } else if ($keys_length != null) {
@@ -140,7 +140,7 @@ class Antrian extends Rest
                         'message'           => 'data antrian gagal dimasukkan',
                         'cause'             => 'panjang value kolom tidak sesuai',
                         'column'            => strtolower($keys_length),
-                        'code'              => 202
+                        'code'              => 201
                     ),
                 );
             } else {
@@ -175,7 +175,7 @@ class Antrian extends Rest
                         'response' => null,
                         'metadata' => array(
                             'message'   => 'Pendaftaran Ke Poli ' . $cek_jadwal['namapoli'] . ' Sudah Tutup Jam ' . $cek_jadwal['jam'],
-                            'code'      => 202
+                            'code'      => 201
                         ),
                     );
                 } else if ($cek_jadwal['code'] == 10) {
@@ -184,7 +184,7 @@ class Antrian extends Rest
                         'response' => null,
                         'metadata' => array(
                             'message'   => 'Pendaftaran ke Poli Ini Sedang Tutup',
-                            'code'      => 202
+                            'code'      => 201
                         ),
                     );
                 } else if ($reset_jadwal['code'] == 7) {
@@ -194,7 +194,7 @@ class Antrian extends Rest
                         'metadata' => array(
                             'message'           => 'data antrian gagal dimasukkan',
                             'cause'             => 'Jadwal Dokter ' . $reset_jadwal['namadokter'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
-                            'code'              => 202
+                            'code'              => 201
                         ),
                     );
                 }else if ($reset_jadwal['code'] == 10) {
@@ -203,7 +203,7 @@ class Antrian extends Rest
                         'response' => null,
                         'metadata' => array(
                             'message'   => 'Pendaftaran ke Poli Ini Sedang Tutup',
-                            'code'      => 202
+                            'code'      => 201
                         ),
                     );
                 } else {
@@ -241,7 +241,7 @@ class Antrian extends Rest
                             'metadata' => array(
                                 'message'           => 'data antrian gagal dimasukkan',
                                 'cause'             => 'pasien telah didaftarkan',
-                                'code'              => 202
+                                'code'              => 201
                             ),
                         );
                     } else {
@@ -265,7 +265,7 @@ class Antrian extends Rest
                     'message'           => 'data antrian gagal dimasukkan',
                     'cause'             => 'data kosong atau tidak sesuai',
                     'column'            => strtolower($keys_kosong),
-                    'code'              => 202
+                    'code'              => 201
                 ),
             );
         }

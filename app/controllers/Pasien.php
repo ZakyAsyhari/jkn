@@ -107,7 +107,7 @@ class Pasien extends Rest
 				$this->response([
 					'response' => ['norm' => null],
 					'metadata' => [
-						'message' => 'Gagal insert data penduduk',
+						'message' => 'Gagal insert data peserta',
 						'code' 	  => 201
 					]
 				], 200);
