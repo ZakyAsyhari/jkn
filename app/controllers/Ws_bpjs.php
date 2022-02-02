@@ -241,7 +241,7 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 		}
 
 		$url = getMethod('dashboard',$this->basehfis,$this->method);
-		return $this->executeHfis($url.'tanggal/'.$tanggal.'/waktu/'.time());
+		return $this->executeHfis($url.'tanggal/'.$tanggal.'/waktu/'.date('Y-m-d'));
 		
 	}
 
@@ -261,7 +261,7 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
 		}
 		$url = getMethod('dashboard',$this->basehfis,$this->method);
-		return $this->executeHfis($url,'bulan/'.$bulan.'/tahun/'.$tahun.'/waktu/'.time());
+		return $this->executeHfis($url,'bulan/'.$bulan.'/tahun/'.$tahun.'/waktu/'.date('Y-m-d'));
 		
 	}
 }
