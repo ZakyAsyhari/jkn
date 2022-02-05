@@ -201,7 +201,8 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 								   from antrian_jkn ap
 								   join mpoli on mpoli.s_name = ap.kodepoli
 								   join muser on muser.nik = ap.iddokter
-								--    join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter and mrk.poli = mpoli.s_name
+								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter and mrk.poli = mpoli.s_name
+								   where ap.flag_ws = 'N'
 								")->result_array();
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);
