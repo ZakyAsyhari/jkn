@@ -196,55 +196,36 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 	}
 
 	public function tambahantrian(){
-		$this->load->model('Antrian_model', 'antrian');
-		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
-								   from antrian_jkn ap
-								   join mpoli on mpoli.s_name = ap.kodepoli
-								   join muser on muser.nik = ap.iddokter
-								--    join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter and mrk.poli = mpoli.s_name
-								")->result_array();
-		foreach ($datas as $key => $val) {
-			$kuota = $this->antrian->set_kuota($val);
-			$data = array(
-				"kodebooking" => $val['id'],
-				"jenispasien"=> 1,
-				"nomorkartu"=> $val['nomorkartu'],
-				"nik" => $val['nik'],
-				"nohp" => $val['notelp'],
-				"kodepoli" => $val['kodepoli'],
-				"namapoli" => $val['namapoli'],
-				"pasienbaru" => 0,
-				"norm" => $val['norm'],
-				"tanggalperiksa" => $val['tanggalperiksa'],
-				"kodedokter" => $val['kode_dokter'],
-				"namadokter" => $val['namadokter'],
-				"jampraktek" => $val['jampraktek'],
-				"jeniskunjungan" => $val['jeniskunjungan'],
-				"nomorreferensi" => $val['nomorreferensi'],
-				"nomorantrean" => 'A-'.$val['noantrian'],
-				"angkaantrean"  => $val['noantrian'],
-				"estimasidilayani" => $val['notelp'],
-				"sisakuotajkn" => (int)$kuota['sisanonjkn'],
-				"kuotajkn" => (int)$kuota['kuotajkn'],
-				"sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
-				"kuotanonjkn" => (int)$kuota['kuotanonjkn'],
-				"keterangan" => $val['keterangan']
-			);
+		$data = array(
+			"kodebooking" => $this->input->post('kodebooking'),
+			"jenispasien"=> $this->input->post('jenispasien'),
+			"nomorkartu"=> $this->input->post('nomorkartu'),
+			"nik" => $this->input->post('nik'),
+			"nohp" => $this->input->post('nohp'),
+			"kodepoli" => $this->input->post('kodepoli'),
+			"namapoli" => $this->input->post('namapoli'),
+			"pasienbaru" => $this->input->post('pasienbaru'),
+			"norm" => $this->input->post('norm'),
+			"tanggalperiksa" => $this->input->post('tanggalperiksa'),
+			"kodedokter" => $this->input->post('kodedokter'),
+			"namadokter" => $this->input->post('namadokter'),
+			"jampraktek" => $this->input->post('jampraktek'),
+			"jeniskunjungan" => $this->input->post('jeniskunjungan'),
+			"nomorreferensi" => $this->input->post('nomorreferensi'),
+			"nomorantrean" => $this->input->post('nomorantrean'),
+			"angkaantrean"  => $this->input->post('angkaantrean'),
+			"estimasidilayani" => $this->input->post('estimasidilayani'),
+			"sisakuotajkn" => $this->input->post('sisakuotajkn'),
+			"kuotajkn" => $this->input->post('kuotajkn'),
+			"sisakuotanonjkn" => $this->input->post('sisakuotanonjkn'),
+			"kuotanonjkn" => $this->input->post('kuotanonjkn'),
+			"keterangan" => $this->input->post('keterangan')
+		 );
 		 $data = json_encode($data);
 		//  header('Content-Type: application/json; charset=utf-8');
 		//  die(json_encode($data));
 		$url = getMethod('tambahantrian',$this->basehfis,$this->method);
-		$res = $this->executeHfis($url,$data,"POST");
-			if($res){
-				$response = json_decode($res);
-				if($response->metadata->code == "200"){
-					$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-					return $res;
-				}else{
-					return $res;
-				}
-			}
-		}
+		return $this->executeHfis($url,$data,"POST");
 	}
 
 	public function dashboarpertanggal(){

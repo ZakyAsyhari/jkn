@@ -203,7 +203,7 @@ function consFinalhFis($response){
 	}
 	// print_r($hasil)
 	header('Content-Type: application/json; charset=utf-8');
-	echo $hasil;
+	return $hasil;
 }
 
 function getMethod($method,$baseurl,$urlparams){
