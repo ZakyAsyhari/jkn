@@ -104,7 +104,8 @@ class Antrian_model extends CI_Model
         $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
                                         from mr_periksa
                                         left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
-                                        where upper(mr_periksa.poli)=upper('$idPoli') and mr_periksa.tglperiksa='$tanggalperiksa'")->row();
+                                        where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
+                                        // upper(mr_periksa.poli)=upper('$idPoli') and
         if (!empty($no_antrian->no)) {
             $estimasi = (int)$no_antrian->estimasidilayani + (3600 * 100);
             $data['estimasidilayani'] = $estimasi;
@@ -123,7 +124,7 @@ class Antrian_model extends CI_Model
         $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
         $insPeriksa = array( 'id'           => $newid->id,
                              'waktu'        => '0',
-                             'tanggal'      => date('Y-m-d'),
+                             'tanggal'      => $data['tanggalperiksa'],
                              'poli'         => $idPoli,
                              'rm'           => $data['norm'],
                              'kode_dok'     => $idDokterrs,
