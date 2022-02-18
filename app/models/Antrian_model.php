@@ -131,7 +131,7 @@ class Antrian_model extends CI_Model
                              'nourut'       => $data['noantrian'],
                              'tgldaftar'    => date('Y-m-d H:i:s'),
                              'tglkeluarmr'  => '0000-00-00 00:00:00',
-                             'tglkembalimr' => '0000-00-00 aa:00:00',
+                             'tglkembalimr' => '0000-00-00 00:00:00',
                              'ambil'        => '0000-00-00 00:00:00',
                              'tglperiksa'   => $data['tanggalperiksa'],
                              'tglclose'     => '0000-00-00 00:00:00'
