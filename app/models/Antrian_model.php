@@ -130,11 +130,11 @@ class Antrian_model extends CI_Model
                              'kode_dok'     => $idDokterrs,
                              'nourut'       => $data['noantrian'],
                              'tgldaftar'    => date('Y-m-d H:i:s'),
-                             'tglkeluarmr'  => '0000-00-00 00:00:00',
-                             'tglkembalimr' => '0000-00-00 00:00:00',
-                             'ambil'        => '0000-00-00 00:00:00',
-                             'tglperiksa'   => $data['tanggalperiksa'],
-                             'tglclose'     => '0000-00-00 00:00:00'
+                            //  'tglkeluarmr'  => '0000-00-00 00:00:00',
+                            //  'tglkembalimr' => '0000-00-00 00:00:00',
+                            //  'ambil'        => '0000-00-00 00:00:00',
+                             'tglperiksa'   => $data['tanggalperiksa']
+                            //  'tglclose'     => '0000-00-00 00:00:00'
     );
         $this->db->insert('mr_periksa', $insPeriksa);
         $this->db->trans_complete();
