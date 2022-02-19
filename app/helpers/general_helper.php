@@ -10,25 +10,25 @@ function debug($string)
 function no_hari($hari){
 	switch($hari){
 		case 'Sun':
-			$hari_ini = 7;
-		break;
-		case 'Mon':			
 			$hari_ini = 1;
 		break;
-		case 'Tue':
+		case 'Mon':			
 			$hari_ini = 2;
 		break;
-		case 'Wed':
+		case 'Tue':
 			$hari_ini = 3;
 		break;
-		case 'Thu':
+		case 'Wed':
 			$hari_ini = 4;
 		break;
-		case 'Fri':
+		case 'Thu':
 			$hari_ini = 5;
 		break;
-		case 'Sat':
+		case 'Fri':
 			$hari_ini = 6;
+		break;
+		case 'Sat':
+			$hari_ini = 7;
 		break;
 		default:
 			$hari_ini = null;		
