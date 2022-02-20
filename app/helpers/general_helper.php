@@ -201,9 +201,9 @@ function consFinalhFis($response){
 	} else {
 		$hasil = $response;
 	}
-	// print_r($hasil)
+	// print_r($hasil);
 	header('Content-Type: application/json; charset=utf-8');
-	return $hasil;
+	echo $hasil;
 }
 
 function getMethod($method,$baseurl,$urlparams){

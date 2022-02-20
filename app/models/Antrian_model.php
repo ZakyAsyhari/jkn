@@ -58,9 +58,10 @@ class Antrian_model extends CI_Model
 
         // CHECK PASIEN TELAH DIDAFTARKAN PADA TANGGAL PERIKSA
         $get_antrian_masuk = $this->db->query("SELECT * from antrian_jkn where nomorkartu = '$data[nomorkartu]'
-                                        and status in (1,2) and tanggalperiksa = '$data[tanggalperiksa]'")->row();
+                                        and status in (1,2) and tanggalperiksa = '$data[tanggalperiksa]' and lower(kodepoli) = lower('$data[kodepoli]') and jampraktek = '$data[jampraktek]'")->row();
+        // debug($get_antrian_masuk);
         if (!empty($get_antrian_masuk)) {
-            $solve = array('code' => '2');
+            $solve = array('id'=>$get_antrian_masuk->id ,'code' => '2');
             return $solve;
         }
 

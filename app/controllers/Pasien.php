@@ -54,7 +54,7 @@ class Pasien extends Rest
 
 		if ($this->jwt != 1) {
 			$pesan_gagal = "Token Expired.";
-		} else if (!empty($this->model_pasien->cek_pasien($input['nomorkartu']))) {
+		} else if (!empty($this->model_pasien->cek_pasien($input['nomorkartu'],$input['nik']))) {
 			$pesan_gagal = "Data Peserta Sudah Pernah Dientrikan";
 		} else if (!validateFormatDate($input['tanggallahir']) || $input['tanggallahir'] > $tanggal_sekarang) {
 			$pesan_gagal = "Format Tanggal Lahir Tidak Sesuai";

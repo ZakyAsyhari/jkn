@@ -71,10 +71,10 @@ class Model_pasien extends CI_Model
 		return $rmMasuk;
 	}
 
-	public function cek_pasien($nomorkartu)
+	public function cek_pasien($nomorkartu,$noktp)
 	{
 		// $pasien = $this->db->get_where('mmr', ['nobpjs' => $nomorkartu])->first_row();
-		$pasien = $this->db->query("SELECT mr_ktp.jkn from mr_ktp join mmr on mmr.rm = mr_ktp.rm where mr_ktp.jkn ='$nomorkartu'")->first_row();
+		$pasien = $this->db->query("SELECT mr_ktp.jkn,mr_ktp.ktp from mr_ktp join mmr on mmr.rm = mr_ktp.rm where mr_ktp.jkn ='$nomorkartu' or mr_ktp.ktp = '$noktp'")->first_row();
 		return $pasien;
 	}
 }

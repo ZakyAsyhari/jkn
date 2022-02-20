@@ -15,6 +15,26 @@ use \Firebase\JWT\JWT;
 
 class Antrian extends Rest
 {
+    var $data_rs        = array('consid'            => '23124',
+                                'secret'            => '6dA1995F61',
+                                'keys'              => 'bd5c6bfaf6d062a4a6f29012a050faeb',
+                                'signature'         => '',
+                                'timestamp'         => '',
+                                'kodeppk'           => '',
+                                );
+    var $method			= array('cariPesertaBpjs' 	=> 'Peserta/nik/',
+								'carinokartu'		=> 'Peserta/nokartu/',
+								'refpoli'			=> 'ref/poli',
+								'refdokter'			=> 'ref/dokter',
+								'jadwaldokter'		=> 'jadwaldokter/',
+								'listwaktutask'	 	=> 'antrean/getlisttask',
+								'updatejadwaldokter'=> 'jadwaldokter/updatejadwaldokter',
+								'dashboard'			=> 'dashboard/waktutunggu/',
+								'batalantrian'		=> 'antrean/batal',
+								'updateantrian'		=> 'antrean/updatewaktu',
+								'tambahantrian'		=> 'antrean/add'
+								);
+    var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
     private $secretkey = 'bd5c6bfaf6d062a4a6f29012a050faeb';
     private $account;
 
@@ -234,16 +254,72 @@ class Antrian extends Rest
                                 'code'          => 200
                             ),
                         );
+
+                        $data = array(
+                            "kodebooking" => $return->id,
+                            "jenispasien"=> 'JKN',
+                            "nomorkartu"=> $data['nomorkartu'],
+                            "nik" => $data['nik'],
+                            "nohp" => $data['notelp'],
+                            "kodepoli" => $data['kodepoli'],
+                            "namapoli" => $return->namapoli,
+                            "pasienbaru" => 0,
+                            "norm" => $return->norm,
+                            "tanggalperiksa" => $data['tanggalperiksa'],
+                            "kodedokter" => $data['kodedokter'],
+                            "namadokter" => $return->namadokter,
+                            "jampraktek" => $data['jampraktek'],
+                            "jeniskunjungan" => $data['jeniskunjungan'],
+                            "nomorreferensi" => $data['nomorreferensi'],
+                            "nomorantrean" => $return->noantrian,
+                            "angkaantrean"  => $return->noantrian,
+                            "estimasidilayani" => (int)$return->estimasidilayani,
+                            "sisakuotajkn" => (int)$kuota['sisanonjkn'],
+                            "kuotajkn" => (int)$kuota['kuotajkn'],
+                            "sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
+                            "kuotanonjkn" => (int)$kuota['kuotanonjkn'],
+                            "keterangan" => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
+                         );
+                         $data = json_encode($data);
+                        //  header('Content-Type: application/json; charset=utf-8');
+                        //  die(json_encode($data));
+                        $url = getMethod('tambahantrian',$this->basehfis,$this->method);
+                        $this->executeHfis($url,$data,"POST");
+
                     } else if ($solve['code'] == 2) {
                         // telah mendaftar pada hari yang sama
-                        $output =  array(
-                            'response' => null,
-                            'metadata' => array(
-                                'message'           => 'data antrian gagal dimasukkan',
-                                'cause'             => 'pasien telah didaftarkan',
-                                'code'              => 201
+                        // $output =  array(
+                        //     'response' => null,
+                        //     'metadata' => array(
+                        //         'message'           => 'data antrian gagal dimasukkan',
+                        //         'cause'             => 'pasien telah didaftarkan',
+                        //         'code'              => 201
+                        //     ),
+                        // );
+                        $return = $this->antrian->antrian_get($solve['id']);
+                        $kuota = $this->antrian->set_kuota($data);
+
+                        $output = array(
+                            'response'      => array(
+                                'nomorantrean'      => $return->noantrian,
+                                'angkaantrean'      => $return->noantrian,
+                                'kodeboking'        => $return->id,
+                                'norm'              => $return->norm,
+                                'namapoli'          => $return->namapoli,
+                                'namadokter'        => $return->namadokter,
+                                'estimasidilayani'  => (int)$return->estimasidilayani,
+                                'sisakuotajkn'      => (int)$kuota['sisanonjkn'],
+                                'kuotajkn'          => (int)$kuota['kuotajkn'],
+                                'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
+                                'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
+                                'keterangan'        => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
+                            ),
+                            'metadata'      => array(
+                                'message'       => 'Ok',
+                                'code'          => 200
                             ),
                         );
+
                     } else {
                         // Poli tidak ditemukan
                         $output =  array(
@@ -594,8 +670,7 @@ class Antrian extends Rest
 
             # ambil data antrian yang lagi berjalan
             $sql = "SELECT * from  antrian_jkn
-                    where 
-                    status in (2) and tanggalperiksa like '%" . $appointment->tanggalperiksa . "%'
+                    where tanggalperiksa like '%" . $appointment->tanggalperiksa . "%'
                     order by id asc";
 
             $antrian_sekarang = $this->db->query($sql)->result();
@@ -650,4 +725,41 @@ class Antrian extends Rest
             ], 200);
         }
     }
+
+    public function executeHfis($url, $request=null, $method="POST"){
+		$headers = generateHeader($this->data_rs);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers['head']);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+		if($request){
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $request );
+		}
+		$content = curl_exec($ch);
+		// print_r($content);
+		// exit();
+		if ($content === false) {
+			echo 'Curl error: ' . curl_error($ch);
+			exit();
+		}else if($content == null){
+			// echo $content;
+			// exit();
+		} else {
+        	// echo 'Operation completed without any errors';
+			// exit();
+		}
+
+		curl_close($ch);
+		$time['time']=$headers['time'];
+		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
+		// print_r($merger_content)h;
+		$final_decode = consFinalhFis($merger_content);
+		return $final_decode;
+	}
+
 }
