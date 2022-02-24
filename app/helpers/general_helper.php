@@ -187,6 +187,8 @@ function consFinal($response){
 
 function consFinalhFis($response){
 	$data = json_decode($response, TRUE); 
+	$cek = (isset($data['metadata']));
+	if($cek == 1){
 	if ($data['metadata']['message'] == 'OK') {
 		$dec = fullDecompress($data['response'],$data['time']);
 		if (empty($dec)) {
@@ -199,6 +201,9 @@ function consFinalhFis($response){
 		// print($hasil);
 		}
 	} else {
+		$hasil = $response;
+	}
+	}else{
 		$hasil = $response;
 	}
 	// print_r($hasil);

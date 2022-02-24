@@ -63,14 +63,20 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $request );
 		}
 		$content = curl_exec($ch);
-		// print_r($content);
-		// exit();
+		$arr = (array)json_decode($content, true);
+		if($arr == null){
+			echo $content;
+			exit();
+		}
 		if ($content === false) {
 			echo 'Curl error: ' . curl_error($ch);
 			exit();
 		}else if($content == null){
 			// echo $content;
 			// exit();
+		}else if($content == 'Not Found' || $content == 'Not Found'){
+			echo 'Curl error: ' . curl_error($ch);
+			exit();
 		} else {
         	// echo 'Operation completed without any errors';
 			// exit();
@@ -78,15 +84,8 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 
 		curl_close($ch);
 		$time['time']=$headers['time'];
-		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
-		// print_r($merger_content)h;
+		$merger_content=json_encode(array_merge((array)json_decode($content, true),$time));
 		$final_decode = consFinalhFis($merger_content);
-
-		// DEBUG PURPOSE
-		// if($this->debug==true){
-			// debug($final_decode);	
-		// 	dd(json_decode($final_decode));
-		// }
 		return $final_decode;
 	}
 
