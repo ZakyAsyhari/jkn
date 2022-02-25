@@ -266,7 +266,7 @@ class Antrian extends Rest
                             "pasienbaru" => 0,
                             "norm" => $return->norm,
                             "tanggalperiksa" => $data['tanggalperiksa'],
-                            "kodedokter" => $data['kodedokter'],
+                            "kodedokter" => $data['iddokter'],
                             "namadokter" => $return->namadokter,
                             "jampraktek" => $data['jampraktek'],
                             "jeniskunjungan" => $data['jeniskunjungan'],
@@ -288,37 +288,37 @@ class Antrian extends Rest
 
                     } else if ($solve['code'] == 2) {
                         // telah mendaftar pada hari yang sama
-                        // $output =  array(
-                        //     'response' => null,
-                        //     'metadata' => array(
-                        //         'message'           => 'data antrian gagal dimasukkan',
-                        //         'cause'             => 'pasien telah didaftarkan',
-                        //         'code'              => 201
-                        //     ),
-                        // );
-                        $return = $this->antrian->antrian_get($solve['id']);
-                        $kuota = $this->antrian->set_kuota($data);
-
-                        $output = array(
-                            'response'      => array(
-                                'nomorantrean'      => $return->noantrian,
-                                'angkaantrean'      => $return->noantrian,
-                                'kodeboking'        => $return->id,
-                                'norm'              => $return->norm,
-                                'namapoli'          => $return->namapoli,
-                                'namadokter'        => $return->namadokter,
-                                'estimasidilayani'  => (int)$return->estimasidilayani,
-                                'sisakuotajkn'      => (int)$kuota['sisanonjkn'],
-                                'kuotajkn'          => (int)$kuota['kuotajkn'],
-                                'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
-                                'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
-                                'keterangan'        => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
-                            ),
-                            'metadata'      => array(
-                                'message'       => 'Ok',
-                                'code'          => 200
+                        $output =  array(
+                            'response' => null,
+                            'metadata' => array(
+                                'message'           => 'data antrian gagal dimasukkan',
+                                'cause'             => 'pasien telah didaftarkan',
+                                'code'              => 201
                             ),
                         );
+                        // $return = $this->antrian->antrian_get($solve['id']);
+                        // $kuota = $this->antrian->set_kuota($data);
+
+                        // $output = array(
+                        //     'response'      => array(
+                        //         'nomorantrean'      => $return->noantrian,
+                        //         'angkaantrean'      => $return->noantrian,
+                        //         'kodeboking'        => $return->id,
+                        //         'norm'              => $return->norm,
+                        //         'namapoli'          => $return->namapoli,
+                        //         'namadokter'        => $return->namadokter,
+                        //         'estimasidilayani'  => (int)$return->estimasidilayani,
+                        //         'sisakuotajkn'      => (int)$kuota['sisanonjkn'],
+                        //         'kuotajkn'          => (int)$kuota['kuotajkn'],
+                        //         'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
+                        //         'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
+                        //         'keterangan'        => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
+                        //     ),
+                        //     'metadata'      => array(
+                        //         'message'       => 'Ok',
+                        //         'code'          => 200
+                        //     ),
+                        // );
 
                     } else {
                         // Poli tidak ditemukan
