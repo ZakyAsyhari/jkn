@@ -211,6 +211,34 @@ function consFinalhFis($response){
 	echo $hasil;
 }
 
+
+function consFinalhFis2($response){
+	$data = json_decode($response, TRUE); 
+	$cek = (isset($data['metadata']));
+	if($cek == 1){
+	if ($data['metadata']['message'] == 'OK') {
+		$dec = fullDecompress($data['response'],$data['time']);
+		if (empty($dec)) {
+			$hasil = array('metaData' => array('code' => 203, 'msg' => 'Gagal mengambil data dari bpjs, silahkan  ulangi lagi'));
+			$hasil = json_encode($hasil);
+		} else {
+			$data['response'] = json_decode($dec);
+			$hasil = json_encode($data);
+
+		// print($hasil);
+		}
+	} else {
+		$hasil = $response;
+	}
+	}else{
+		$hasil = $response;
+	}
+	// print_r($hasil);
+	header('Content-Type: application/json; charset=utf-8');
+	return $hasil;
+}
+
+
 function getMethod($method,$baseurl,$urlparams){
 
 	$availableMethod = $urlparams;

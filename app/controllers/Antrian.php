@@ -758,8 +758,8 @@ class Antrian extends Rest
 		$time['time']=$headers['time'];
 		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
 		// print_r($merger_content)h;
-		$final_decode = consFinalhFis($merger_content);
-		return $final_decode;
+		$final_decode = consFinalhFis2($merger_content);
+		// return $final_decode;
 	}
 
 }
