@@ -34,6 +34,9 @@ class Model_pasien extends CI_Model
 			'nama'		=> $input['nama'],
 			'alamat'	=> $input['alamat'],
 			'hp'		=> $input['nohp'],
+			'alm_asal'	=> '',
+			'alm_lama'	=> '',
+			'dusun'		=> '',
 			'jk'		=> $input['jeniskelamin'],
 			'tgllahir'	=> $input['tanggallahir'],
 			'propinsi'	=> $input['namaprop'],
@@ -41,7 +44,43 @@ class Model_pasien extends CI_Model
 			'kecamatan'	=> $input['namakec'],
 			'kelurahan'	=> $input['namakel'],
 			'rt'		=> $input['rt'],
-			'rw'		=> $input['rw']
+			'rw'		=> $input['rw'],
+			'email'	=> '',
+			'tlahir'	=> '',
+			'goldarah'	=> '',
+			'wnegara'	=> '',
+			'pendidikan'	=> '',
+			'skawin'	=> '',
+			'pekerjaan'	=> '',
+			'extpekerjaan'	=> '',
+			'agama'	=> '',
+			'wilayah'	=> '',
+			'ibu_nama'	=> '',
+			'terdaftar'	=> '',
+			'user_kode'	=> '',
+			'dati2'	=> '',
+			'otnama'	=> '',
+			'otumur'	=> '',
+			'otkerja'	=> '',
+			'otextkerja'	=> '',
+			'otalamat'	=> '',
+			'otdusun'	=> '',
+			'otrt'	=> '',
+			'otrw'	=> '',
+			'otkelurahan'	=> '',
+			'otkecamatan'	=> '',
+			'otkabupaten'	=> '',
+			'otpropinsi'	=> '',
+			'ottelp'	=> '',
+			'othp'	=> '',
+			'bayar'	=> '',
+			'KBayar'	=> '',
+			'pjnama'	=> '',
+			'pjalamat'	=> '',
+			'pjtelp'	=> '',
+			'alergi'	=> '',
+			'ondelete'	=> '',
+
 		]);
 
 		$id_mrk = $this->db->select('max(id) as id')
@@ -54,9 +93,12 @@ class Model_pasien extends CI_Model
 			'id'		=> $new_id_mrk,
 			'rm'		=> $rmMasuk,
 			'ktp'		=> $input['nik'],
+			'gambar'	=> '',
 			'alamat'	=> $input['alamat'],
 			'jkn'		=> $input['nomorkartu'],
-			'tglsave'	=> $date_now
+			'catatan'	=> '',
+			'tglsave'	=> $date_now,
+			'id_user'	=> ''
 		]);
 
 		
