@@ -741,8 +741,11 @@ class Antrian extends Rest
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $request );
 		}
 		$content = curl_exec($ch);
-		// print_r($content);
-		// exit();
+        $arr = (array)json_decode($content, true);
+		if($arr == null){
+			echo $content;
+			exit();
+		}
 		if ($content === false) {
 			echo 'Curl error: ' . curl_error($ch);
 			exit();
@@ -756,7 +759,7 @@ class Antrian extends Rest
 
 		curl_close($ch);
 		$time['time']=$headers['time'];
-		$merger_content=json_encode(array_merge(json_decode($content, true),$time));
+		$merger_content=json_encode(array_merge((array)json_decode($content, true),$time));
 		// print_r($merger_content)h;
 		$final_decode = consFinalhFis2($merger_content);
 		// return $final_decode;

@@ -46,12 +46,12 @@ class Operasiall extends Rest
         );
 
         if ($this->jwt != 1) {
-            $this->response([
+            $output =  array(
                 'metadata' => [
                     'message' => "Token Expired.",
                     'code' => 201
                 ]
-            ], 200);
+            );
         } else if (validateRangeDate($this->post('tanggalawal'), $this->post('tanggalakhir'))) {
             $output =  array(
                 'response' => null,
