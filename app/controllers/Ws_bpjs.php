@@ -9,9 +9,9 @@ class Ws_bpjs extends CI_Controller
 	var $secret			= '6dA1995F61';
 	var $keys			= 'bd5c6bfaf6d062a4a6f29012a050faeb';
 	var $kodeppk 		= '';
-    var $data_rs        = array('consid'            => '23124',
-                                'secret'            => '6dA1995F61',
-                                'keys'              => 'bd5c6bfaf6d062a4a6f29012a050faeb',
+    var $data_rs        = array('consid'            => '3800',
+                                'secret'            => '8qN33CCC0A',
+                                'keys'              => 'dea269577e27e10e037e1e74178b7e57',
                                 'signature'         => '',
                                 'timestamp'         => '',
                                 'kodeppk'           => '',
@@ -120,6 +120,7 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 
 	public function listWaktutask(){
 		$pesan = '';
+		$data =  '';
 		$kodebooking 		= $this->input->post('kodebooking');
 
 		if(empty($kodebooking)){
@@ -129,10 +130,12 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 		if(!empty($pesan)){
 			header('Content-Type: application/json; charset=utf-8');
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
+		}else{
+			$data = json_encode($this->input->post());
 		}
-
 		$url = getMethod('listwaktutask',$this->basehfis,$this->method);
-		return $this->executeHfis($url);
+		// debug($url);
+		return $this->executeHfis($url,$data);
 	}
 
 	public function batalantrian(){
