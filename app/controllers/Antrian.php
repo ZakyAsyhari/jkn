@@ -15,9 +15,9 @@ use \Firebase\JWT\JWT;
 
 class Antrian extends Rest
 {
-    var $data_rs        = array('consid'            => '23124',
-                                'secret'            => '6dA1995F61',
-                                'keys'              => 'bd5c6bfaf6d062a4a6f29012a050faeb',
+    var $data_rs        = array('consid'            => '3800',
+                                'secret'            => '8qN33CCC0A',
+                                'keys'              => 'dea269577e27e10e037e1e74178b7e57',
                                 'signature'         => '',
                                 'timestamp'         => '',
                                 'kodeppk'           => '',
@@ -35,7 +35,7 @@ class Antrian extends Rest
 								'tambahantrian'		=> 'antrean/add'
 								);
     var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
-    private $secretkey = 'bd5c6bfaf6d062a4a6f29012a050faeb';
+    private $secretkey = 'dea269577e27e10e037e1e74178b7e57';
     private $account;
 
     public function __construct()

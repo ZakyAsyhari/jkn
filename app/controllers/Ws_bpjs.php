@@ -317,7 +317,7 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
 		}
 		$url = getMethod('dashboard',$this->basehfis,$this->method);
-		return $this->executeHfis($url,'bulan/'.$bulan.'/tahun/'.$tahun.'/waktu/'.date('Y-m-d'));
+		return $this->executeHfis($url,'bulan/03/tahun/2022/waktu/'.time());
 		
 	}
 }
