@@ -129,6 +129,8 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 		if(!empty($pesan)){
 			header('Content-Type: application/json; charset=utf-8');
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
+		}else{
+			$data = json_encode($this->input->post());
 		}
 
 		$url = getMethod('listwaktutask',$this->basehfis,$this->method);
