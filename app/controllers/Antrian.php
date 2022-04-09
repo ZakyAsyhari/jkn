@@ -15,9 +15,9 @@ use \Firebase\JWT\JWT;
 
 class Antrian extends Rest
 {
-    var $data_rs        = array('consid'            => '23124',
-                                'secret'            => '6dA1995F61',
-                                'keys'              => 'bd5c6bfaf6d062a4a6f29012a050faeb',
+    var $data_rs        = array('consid'            => '18949',
+                                'secret'            => '5nN61FD7CA',
+                                'keys'              => 'e78eabacc9a866b3af284be1fe864f76',
                                 'signature'         => '',
                                 'timestamp'         => '',
                                 'kodeppk'           => '',
@@ -34,8 +34,8 @@ class Antrian extends Rest
 								'updateantrian'		=> 'antrean/updatewaktu',
 								'tambahantrian'		=> 'antrean/add'
 								);
-    var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
-    private $secretkey = 'bd5c6bfaf6d062a4a6f29012a050faeb';
+    var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antrean_rs/';
+    private $secretkey = 'e78eabacc9a866b3af284be1fe864f76';
     private $account;
 
     public function __construct()
@@ -284,7 +284,25 @@ class Antrian extends Rest
                         //  header('Content-Type: application/json; charset=utf-8');
                         //  die(json_encode($data));
                         $url = getMethod('tambahantrian',$this->basehfis,$this->method);
-                        $this->executeHfis($url,$data,"POST");
+                        $res = $this->executeHfis($url,$data,"POST");
+                        if($res){
+                            $response = json_decode($res);
+                            if($response->metadata->code == "200"){
+                                // update task id
+                                $waktu 				= round(microtime(true) * 1000);
+                                $taskdata =array("kodebooking" => $return->id,
+                                "taskid" => "1",
+                                "waktu" => "$waktu");
+            
+                                $data = json_encode($data);
+                                $url = getMethod('updateantrian',$this->basehfis,$this->method);
+                                // print_r($data);exit();
+                                $this->executeHfis($url,$data,"POST");
+                                return $res;
+                            }else{
+                                return $res;
+                            }
+                        }
 
                     } else if ($solve['code'] == 2) {
                         // telah mendaftar pada hari yang sama

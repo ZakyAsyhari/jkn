@@ -3,18 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ws_bpjs extends CI_Controller
 {
-	var $consid 		= '23124';
+	var $consid 		= '18949';
 	var $timestamp 		= '';
 	var $signature		= '';
-	var $secret			= '6dA1995F61';
-	var $keys			= 'bd5c6bfaf6d062a4a6f29012a050faeb';
+	var $secret			= '5nN61FD7CA';
+	var $keys			= 'e78eabacc9a866b3af284be1fe864f76';
 	var $kodeppk 		= '';
-    var $data_rs        = array('consid'            => '23124',
-                                'secret'            => '6dA1995F61',
-                                'keys'              => 'bd5c6bfaf6d062a4a6f29012a050faeb',
+    var $data_rs        = array('consid'            => '18949',
+                                'secret'            => '5nN61FD7CA',
+                                'keys'              => 'e78eabacc9a866b3af284be1fe864f76',
                                 'signature'         => '',
                                 'timestamp'         => '',
-                                'kodeppk'           => '',
+                                'kodeppk'           => '0177R010',
                                 );
 	var $method			= array('cariPesertaBpjs' 	=> 'Peserta/nik/',
 								'carinokartu'		=> 'Peserta/nokartu/',
@@ -28,7 +28,7 @@ class Ws_bpjs extends CI_Controller
 								'updateantrian'		=> 'antrean/updatewaktu',
 								'tambahantrian'		=> 'antrean/add'
 								);
-var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
+var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antrean_rs/';
 	var $debug= false;
 	public function construct()
 	{
@@ -134,7 +134,7 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 		}
 
 		$url = getMethod('listwaktutask',$this->basehfis,$this->method);
-		return $this->executeHfis($url);
+		return $this->executeHfis($url,$data);
 	}
 
 	public function batalantrian(){
@@ -169,15 +169,15 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 		$pesan = '';
 		$kodebooking 		= $this->input->post('kodebooking');
 		$taskid 			= $this->input->post('taskid');
-		$waktu 				= $this->input->post('waktu');
+		$waktu 				= round(microtime(true) * 1000);
 
 		if(empty($kodebooking)){
 			$pesan = "Kode Booking Belum di isi";
 		}
 
-		if(empty($waktu)){
-			$pesan = "Waktu Belum di isi";
-		}
+		// if(empty($waktu)){
+		// 	$pesan = "Waktu Belum di isi";
+		// }
 		if(empty($taskid)){
 			$pesan = "Task Id Belum di isi";
 		}
@@ -241,6 +241,17 @@ var $basehfis		= 'https://apijkn-dev.bpjs-kesehatan.go.id/antreanrs_dev/';
 			if($res){
 				$response = json_decode($res);
 				if($response->metadata->code == "200"){
+					// update task id
+					$waktu 				= round(microtime(true) * 1000);
+					$taskdata =array("kodebooking" => "$val[id]",
+					"taskid" => "3",
+					"waktu" => "$waktu");
+
+					$data = json_encode($data);
+					$url = getMethod('updateantrian',$this->basehfis,$this->method);
+					// print_r($data);exit();
+					$this->executeHfis($url,$data,"POST");
+
 					$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 					return $res;
 				}else{
