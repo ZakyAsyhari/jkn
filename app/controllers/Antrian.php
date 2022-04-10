@@ -60,7 +60,9 @@ class Antrian extends Rest
     public function index_post()
     {
         // $date       = new DateTime();
+        $kodebook = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
         $data = array(
+            'id'                => $kodebook->id,
             'nomorkartu'        => $this->post('nomorkartu'),
             'nik'               => $this->post('nik'),
             'norm'              => $this->post('norm'),
