@@ -133,7 +133,7 @@ function keybpjs($time)
     // date_default_timezone_set('UTC');   
     // $tStamp = strval(time() - strtotime('1970-01-01 00:00:00'));
     $tStamp = $time;
-    $key = '38008qN33CCC0A' . $tStamp;
+    $key = '231246dA1995F61' . $tStamp;
     return $key;
 }
 
