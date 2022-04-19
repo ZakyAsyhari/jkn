@@ -41,7 +41,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 	}
 
-	public function executeHfis($url, $request=null, $method="POST"){
+	public function executeHfis($url, $request=null, $method="POST",$tipe="1"){
 		$headers = generateHeader($this->data_rs);
 		
 		// if($this->debug==true){
@@ -83,6 +83,11 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		}
 
 		curl_close($ch);
+		if($tipe == "2"){
+			header('Content-Type: application/json; charset=utf-8');
+			echo $content;
+			exit();
+		}
 		$time['time']=$headers['time'];
 		$merger_content=json_encode(array_merge((array)json_decode($content, true),$time));
 		$final_decode = consFinalhFis($merger_content);
@@ -307,7 +312,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		}
 
 		$url = getMethod('dashboard',$this->basehfis,$this->method);
-		return $this->executeHfis($url.'tanggal/'.$tanggal.'/waktu/'.date('Y-m-d'));
+		return $this->executeHfis($url.'tanggal/'.$tanggal.'/waktu/server',null,'GET','2');
 		
 	}
 
@@ -327,7 +332,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			die(json_encode(['metadata'=>['message'=>$pesan,'code'=>201]]));
 		}
 		$url = getMethod('dashboard',$this->basehfis,$this->method);
-		return $this->executeHfis($url,'bulan/'.$bulan.'/tahun/'.$tahun.'/waktu/'.date('Y-m-d'));
+		return $this->executeHfis($url.'bulan/'.$bulan.'/tahun/'.$tahun.'/waktu/server',null,'GET','2');
 		
 	}
 }
