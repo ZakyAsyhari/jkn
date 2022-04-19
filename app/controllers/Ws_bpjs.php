@@ -55,7 +55,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antrean_rs/';
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers['head']);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 		if($request){
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
