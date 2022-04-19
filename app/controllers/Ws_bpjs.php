@@ -28,7 +28,7 @@ class Ws_bpjs extends CI_Controller
 								'updateantrian'		=> 'antrean/updatewaktu',
 								'tambahantrian'		=> 'antrean/add'
 								);
-var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antrean_rs/';
+var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 	var $debug= false;
 	public function construct()
 	{
