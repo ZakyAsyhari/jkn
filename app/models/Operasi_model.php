@@ -14,7 +14,7 @@ class Operasi_model extends CI_Model
         $this->db2 = $this->load->database('second', TRUE);
     }
     public function operasi_all($data){
-        $operasi = $this->db2->query("SELECT * from ok_jadwal_operasi where tglOperasi  between 
+        $operasi = $this->db2->query("SELECT * from oka_jadwal_operasi where tglOperasi  between 
                                     '$data[tanggalawal]' and '$data[tanggalakhir]'")->result_array();
         // print_r(($operasi));
         // exit;
@@ -37,7 +37,7 @@ class Operasi_model extends CI_Model
     public function operasi_peserta($data){
         // print_r($data);
         // exit;
-        $operasi = $this->db2->query("SELECT * from ok_jadwal_operasi where noJKN  = '$data[nopeserta]'")->result_array();
+        $operasi = $this->db2->query("SELECT * from oka_jadwal_operasi where noJKN  = '$data[nopeserta]'")->result_array();
   
         if(empty($operasi)) return FALSE;
         foreach ($operasi as $key=> $value) {

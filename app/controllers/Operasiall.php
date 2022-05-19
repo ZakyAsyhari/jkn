@@ -15,7 +15,7 @@ use \Firebase\JWT\JWT;
 
 class Operasiall extends Rest
 {
-    private $secretkey = 'bd5c6bfaf6d062a4a6f29012a050faeb';
+    private $secretkey = 'e78eabacc9a866b3af284be1fe864f76';
     private $account;
 
     public function __construct()
