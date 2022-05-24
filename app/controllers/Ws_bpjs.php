@@ -94,6 +94,59 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		return $final_decode;
 	}
 
+	public function executeHfislog($url, $request=null, $method="POST",$tipe="1"){
+		$headers = generateHeader($this->data_rs);
+		
+		// if($this->debug==true){
+		// 	// show_array($headers);
+		// 	// show_array($url);
+		// 	// show_array(json_decode($request));
+		// }
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers['head']);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+		if($request){
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $request );
+		}
+		$content = curl_exec($ch);
+		$arr = (array)json_decode($content, true);
+		if($arr == null){
+			echo $content;
+			exit();
+		}
+		if ($content === false) {
+			echo 'Curl error: ' . curl_error($ch);
+			exit();
+		}else if($content == null){
+			// echo $content;
+			// exit();
+		}else if($content == 'Not Found' || $content == 'Not Found'){
+			echo 'Curl error: ' . curl_error($ch);
+			exit();
+		} else {
+        	// echo 'Operation completed without any errors';
+			// exit();
+		}
+
+		curl_close($ch);
+		if($tipe == "2"){
+			header('Content-Type: application/json; charset=utf-8');
+			echo $content;
+			exit();
+		}
+		$time['time']=$headers['time'];
+		$merger_content=json_encode(array_merge((array)json_decode($content, true),$time));
+		$final_decode = consFinalhFis3($merger_content);
+		return $final_decode;
+	}
+
 
 	public function refpoli(){
 		$url = getMethod('refpoli',$this->basehfis,$this->method);
@@ -242,15 +295,21 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		//  header('Content-Type: application/json; charset=utf-8');
 		//  die(json_encode($data));
 		$url = getMethod('tambahantrian',$this->basehfis,$this->method);
-		$res = $this->executeHfis($url,$data,"POST");
+		$res = $this->executeHfislog($url,$data,"POST");
 			if($res){
 				$response = json_decode($res);
-				if($response->metadata->code == "200"){
+				if($response->metadata->code == "201"){
+					// add log
+					$this->db->insert('log_jkn', [
+						'data'		=> $data,
+					]);
 					// update task id
+					
 					$waktu 				= round(microtime(true) * 1000);
 					$taskdata =array("kodebooking" => "$val[id]",
 					"taskid" => "3",
 					"waktu" => "$waktu");
+					exit();
 
 					$data = json_encode($data);
 					$url = getMethod('updateantrian',$this->basehfis,$this->method);
