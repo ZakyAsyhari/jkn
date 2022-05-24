@@ -309,7 +309,6 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 					$taskdata =array("kodebooking" => "$val[id]",
 					"taskid" => "3",
 					"waktu" => "$waktu");
-					exit();
 
 					$data = json_encode($data);
 					$url = getMethod('updateantrian',$this->basehfis,$this->method);
