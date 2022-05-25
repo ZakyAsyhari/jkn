@@ -256,19 +256,23 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 	public function tambahantrian(){
 		$this->load->model('Antrian_model', 'antrian');
+		// insert data non jkn
+		$this->antrian->get_non_jkn();
+		// cek data di mr_karcis cetak
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join mpoli on mpoli.s_name = ap.kodepoli
 								   join muser on muser.nik = ap.iddokter
-								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter and mrk.poli = mpoli.s_name
+								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter and mrk.poli = mpoli.poli
 								   where ap.flag_ws = 'N'
 								")->result_array();
 		// print_r($datas);
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);
+			$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
 			$data = array(
 				"kodebooking" => $val['id'],
-				"jenispasien"=> 'JKN',
+				"jenispasien"=> $jp,
 				"nomorkartu"=> $val['nomorkartu'],
 				"nik" => $val['nik'],
 				"nohp" => $val['notelp'],
@@ -303,17 +307,18 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 					$this->db->insert('log_jkn', [
 						'data'		=> $data,
 					]);
-					// update task id
-					
-					$waktu 				= round(microtime(true) * 1000);
-					$taskdata =array("kodebooking" => "$val[id]",
-					"taskid" => "3",
-					"waktu" => "$waktu");
-
-					$data = json_encode($data);
-					$url = getMethod('updateantrian',$this->basehfis,$this->method);
-					// print_r($data);exit();
-					$this->executeHfis($url,$data,"POST");
+					// update task id sampai 3
+					for ($i=3; $i <=3 ; $i++) { 
+						$waktu 				= round(microtime(true) * 1000);
+						$taskdata =array("kodebooking" => "$val[id]",
+						"taskid" => $i,
+						"waktu" => "$waktu");
+	
+						$data = json_encode($data);
+						$url = getMethod('updateantrian',$this->basehfis,$this->method);
+						// print_r($data);exit();
+						$this->executeHfis($url,$data,"POST");
+					}
 
 					$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 					return $res;
