@@ -316,7 +316,7 @@ class Antrian_model extends CI_Model
 					-- group by mrp.rm,mrk.ktp,mmr.hp,mrp.tglperiksa,muser.nm_user,muser.id_extpass,mpoli.s_name,muser.nik,mpoli.poli,mpoli.nama 
                     -- order by mrp.id desc 
                     LIMIT 10")->result_array();
-                    debug($ddnonjkn);
+                    debug($dnonjkn);
         foreach ($dnonjkn as $key => $val) {
             $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
             $kodebook = $generate->id;
