@@ -257,7 +257,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 	public function tambahantrian(){
 		$this->load->model('Antrian_model', 'antrian');
 		// insert data non jkn
-		$this->antrian->get_non_jkn();
+		// $this->antrian->get_non_jkn();
 		// cek data di mr_karcis cetak
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
@@ -267,7 +267,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   where ap.flag_ws = 'N'
 								")->result_array();
 		// print_r($datas);
-		// debug($datas);
+		debug($datas);
 		exit();
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);

@@ -312,10 +312,10 @@ class Antrian_model extends CI_Model
 					join muser on muser.nik = mrp.kode_dok
 					join mpoli on mpoli.poli = mrp.poli
 					join mr_jadwal_tetap mrj on mrj.dokter = muser.nik and mrj.poli = mpoli.poli
-					-- where NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
+					where NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
 					group by mrp.rm,mrk.ktp,mmr.hp,mrp.tglperiksa,muser.nm_user,muser.id_extpass,mpoli.s_name,muser.nik,mpoli.poli,mpoli.nama 
-                    LIMIT 5")->result_array();
-                    debug($dnonjkn);
+                    order by mrp.id desc 
+                    LIMIT 10")->result_array();
         foreach ($dnonjkn as $key => $val) {
             $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
             $kodebook = $generate->id;
