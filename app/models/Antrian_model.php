@@ -303,8 +303,6 @@ class Antrian_model extends CI_Model
     }
 
     public function get_non_jkn(){
-        $cek = $this->db->query("SELECT * from mpoli LIMIT 30")->result_array();
-        debug($cek);
         $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tglperiksa as tanggalperiksa,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
 					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli
