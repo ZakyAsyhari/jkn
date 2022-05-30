@@ -315,9 +315,9 @@ class Antrian_model extends CI_Model
 					join mpoli on mpoli.poli = mrp.poli
 					-- join mr_jadwal_tetap mrj on mrj.dokter = muser.nik and mrj.poli = mpoli.poli
                     WHERE muser.id_extpass is not null and mpoli.s_name is not null
-					-- where NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
+					AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
 					-- group by mrp.rm,mrk.ktp,mmr.hp,mrp.tgldaftar,muser.nm_user,muser.id_extpass,mpoli.s_name,muser.nik,mpoli.poli,mpoli.nama 
-                    -- order by mrp.id desc 
+                    order by mrp.id desc 
                     LIMIT 10")->result_array();
                     debug($dnonjkn);
         foreach ($dnonjkn as $key => $val) {
