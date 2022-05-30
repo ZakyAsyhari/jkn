@@ -303,7 +303,7 @@ class Antrian_model extends CI_Model
     }
 
     public function get_non_jkn(){
-        $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tglperiksa as tanggalperiksa,
+        $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tgldaftar as tanggalperiksa,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
 					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli
 					from mr_periksa as mrp
@@ -314,8 +314,8 @@ class Antrian_model extends CI_Model
 					join mr_jadwal_tetap mrj on mrj.dokter = muser.nik and mrj.poli = mpoli.poli
                     WHERE muser.id_extpass is not null and mpoli.s_name is not null
 					-- where NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
-					-- group by mrp.rm,mrk.ktp,mmr.hp,mrp.tglperiksa,muser.nm_user,muser.id_extpass,mpoli.s_name,muser.nik,mpoli.poli,mpoli.nama 
-                    -- order by mrp.id desc 
+					group by mrp.rm,mrk.ktp,mmr.hp,mrp.tglperiksa,muser.nm_user,muser.id_extpass,mpoli.s_name,muser.nik,mpoli.poli,mpoli.nama 
+                    order by mrp.id desc 
                     LIMIT 10")->result_array();
                     debug($dnonjkn);
         foreach ($dnonjkn as $key => $val) {
