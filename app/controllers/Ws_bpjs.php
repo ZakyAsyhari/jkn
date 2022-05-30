@@ -263,7 +263,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   from antrian_jkn ap
 								   join mpoli on mpoli.s_name = ap.kodepoli
 								   join muser on muser.nik = ap.iddokter
-								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm and mrk.dokter = ap.iddokter
+								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
 								   where ap.flag_ws = 'N'
 								")->result_array();
 		// print_r($datas);
