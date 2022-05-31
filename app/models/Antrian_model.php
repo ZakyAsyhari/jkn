@@ -312,8 +312,7 @@ class Antrian_model extends CI_Model
 					join mr_ktp mrk on mrk.rm = mmr.rm
 					join muser on muser.nik = mrp.kode_dok
 					join mpoli on mpoli.poli = mrp.poli
-                    order by mrp.id desc 
-                    LIMIT 2")->result_array();
+                    order by mrp.id desc")->row();
                     debug($dnonjkn);
                     exit();
         foreach ($dnonjkn as $key => $val) {
