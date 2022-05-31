@@ -256,6 +256,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 	public function tambahantrian(){
 		$this->load->model('Antrian_model', 'antrian');
+		$tglsekarang = date('Y-m-d');
 		// insert data non jkn
 		$this->antrian->get_non_jkn();
 		// cek data di mr_karcis cetak
@@ -264,7 +265,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   join mpoli on mpoli.s_name = ap.kodepoli
 								   join muser on muser.nik = ap.iddokter
 								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
-								   where ap.flag_ws = 'N'
+								   where ap.flag_ws = 'N' and date(ap.tglinsert) = '$tglsekarang' 
 								")->result_array();
 		// print_r($datas);
 		// debug($datas);
