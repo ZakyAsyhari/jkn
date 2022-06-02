@@ -119,17 +119,17 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$arr = (array)json_decode($content, true);
 		if($arr == null){
 			echo $content;
-			exit();
+			// exit();
 		}
 		if ($content === false) {
 			echo 'Curl error: ' . curl_error($ch);
-			exit();
+			// exit();
 		}else if($content == null){
 			// echo $content;
 			// exit();
 		}else if($content == 'Not Found' || $content == 'Not Found'){
 			echo 'Curl error: ' . curl_error($ch);
-			exit();
+			// exit();
 		} else {
         	// echo 'Operation completed without any errors';
 			// exit();
