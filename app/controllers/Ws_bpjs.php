@@ -270,8 +270,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		debug($datas);
-		exit();
+		// debug($datas);
+		// exit();
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);
 			$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
@@ -305,6 +305,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		//  die(json_encode($data));
 		$url = getMethod('tambahantrian',$this->basehfis,$this->method);
 		$res = $this->executeHfislog($url,$data,"POST");
+		echo $res;
 			if($res){
 				$response = json_decode($res);
 				if($response->metadata->code == "201"){
