@@ -259,6 +259,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$tglsekarang = date('Y-m-d');
 		// insert data non jkn
 		$this->antrian->get_non_jkn();
+		exit();
 		// cek data di mr_karcis cetak
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
