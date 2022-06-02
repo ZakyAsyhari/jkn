@@ -265,7 +265,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
-								--    join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
+								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
 								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and date(ap.tglinsert) = '$tglsekarang' 
 								   LIMIT 10
 								")->result_array();
