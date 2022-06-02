@@ -266,6 +266,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   join muser on muser.nik = ap.iddokter
 								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
 								   where ap.flag_ws = 'N' and date(ap.tglinsert) = '$tglsekarang' 
+								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
 		// debug($datas);
