@@ -266,12 +266,12 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
 								   join (select rm,dokter,poli,count(*) from mr_karcis_cetak group by rm,dokter,poli) mrk on mrk.rm = ap.norm
-								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and date(ap.tglinsert) = '$tglsekarang' 
+								   where (ap.flag_ws = 'Y' or ap.flag_ws is null) and date(ap.tglinsert) = '$tglsekarang' 
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		// debug($datas);
-		// exit();
+		debug($datas);
+		exit();
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);
 			$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
