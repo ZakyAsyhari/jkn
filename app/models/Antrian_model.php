@@ -321,7 +321,7 @@ class Antrian_model extends CI_Model
                     // exit();
         foreach ($dnonjkn as $key => $val) {
             $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
-            $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = '$val[norm]', nik = '$val[nik]',kodepoli ='$val[kodepoli]',iddokter= '$val[iddokter]',tanggalperiksa = '$tanggalperiksa'")->row(); 
+            $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = '$val[norm]' and nik = '$val[nik]' and kodepoli ='$val[kodepoli]' and iddokter= '$val[iddokter]' and tanggalperiksa = '$tanggalperiksa'")->row(); 
             if($cekdatajkn != null){
                 $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
                 $kodebook = $generate->id;
