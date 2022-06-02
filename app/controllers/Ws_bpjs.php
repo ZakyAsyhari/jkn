@@ -261,7 +261,6 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$this->antrian->get_non_jkn();
 		// exit();
 		// cek data di mr_karcis cetak
-		$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => 1654150693]);
 		
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
@@ -324,7 +323,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							"taskid" => $i,
 							"waktu" => "$waktu");
 		
-							$data = json_encode($data);
+							$data = json_encode($taskdata);
 							$url = getMethod('updateantrian',$this->basehfis,$this->method);
 							// print_r($data);exit();
 							$this->executeHfislog($url,$data,"POST");
