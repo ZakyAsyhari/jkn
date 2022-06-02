@@ -306,7 +306,7 @@ class Antrian_model extends CI_Model
         $tglsekarang = date('Y-m-d');
         $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tgldaftar as tanggalperiksa,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
-					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli
+					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli,mrk.jkn
 					from mr_periksa as mrp
 					join mmr on mmr.rm = mrp.rm
 					join mr_ktp mrk on mrk.rm = mmr.rm
@@ -343,7 +343,7 @@ class Antrian_model extends CI_Model
                                             where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
                 $data = array(
                     'id'                => $kodebook,
-                    'nomorkartu'        => '',
+                    'nomorkartu'        => $val['jkn'],
                     'nik'               => $val['nik'],
                     'norm'              => $val['norm'],
                     'notelp'            => $val['hp'],
