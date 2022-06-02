@@ -334,6 +334,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							echo "$val[id] success!!<br>";
 							return $res;
 						}else if($response->metadata->code == "208"){
+							for ($i=1; $i <=3 ; $i++) { 
+								$waktu 				= round(microtime(true) * 1000);
 							$taskdata =array("kodebooking" => "$val[id]",
 								"taskid" => $i,
 								"waktu" => "$waktu");
@@ -342,7 +344,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								$url = getMethod('updateantrian',$this->basehfis,$this->method);
 								// print_r($data);exit();
 								$this->executeHfislog($url,$data,"POST");
-							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+							}
+								$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 							echo "$val[id] success!!<br>";
 						}else{
 							return $res;
