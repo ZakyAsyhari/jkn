@@ -313,60 +313,63 @@ class Antrian_model extends CI_Model
 					join muser on muser.nik = mrp.kode_dok
 					join mpoli on mpoli.poli = mrp.poli
                     WHERE muser.id_extpass is not null and mpoli.s_name is not null
-					AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
+					-- AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
                     AND DATE(mrp.tgldaftar) = '$tglsekarang'
                     order by mrp.id desc 
                     LIMIT 10")->result_array();
-                    // debug($dnonjkn);
-                    // exit();
+                    debug($dnonjkn);
+                    exit();
         foreach ($dnonjkn as $key => $val) {
-            $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
-            $kodebook = $generate->id;
-            $days_now = date("D", strtotime(date('Y-m-d', strtotime($val['tanggalperiksa']))));
-            $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
-            $days_num = no_hari($days_now);
-            // cek kode booking
-            $cekkode = $this->db->query("SELECT id from antrian_jkn where id = $kodebook")->row();
-            if(!empty($cekkode)){
-                $newcode = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
-                $kodebook = $newcode->id+1;
-            }
-            
-            // get jam praktek
-            $jam = $this->db->query("SELECT CONCAT_WS('-',ltrim(awal),ltrim(akhir)) as jam from mr_jadwal_tetap where poli = $val[poli] and dokter = $val[iddokter] and hari = $days_num")->row();
-            // get no urut antrian jkn
-            $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
-                                        from mr_periksa
-                                        left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
-                                        where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
-            $data = array(
-                'id'                => $kodebook,
-                'nomorkartu'        => '',
-                'nik'               => $val['nik'],
-                'norm'              => $val['norm'],
-                'notelp'            => $val['hp'],
-                'tanggalperiksa'    => $val['tanggalperiksa'],
-                'kodepoli'          => $val['kodepoli'],
-                'nomorreferensi'    => '',
-                'jeniskunjungan'    => 1,
-                'iddokter'          => $val['iddokter'],
-                'jampraktek'        => $jam->jam ,
-                'status'            => 1,
-                'tglinsert'         => date('Y-m-d h:i:s'),
-                'namapoli'          => $val['nama_poli'],
-                'namadokter'        => $val['nm_dokter']
+            $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = $val[norm], nik = $val[nik],kodepoli =$val[kodepoli],iddokter= $val[iddokter],tanggalperiksa = $val[tanggalperiksa]")->row(); 
+            if($cekdatajkn != null){
+                $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
+                $kodebook = $generate->id;
+                $days_now = date("D", strtotime(date('Y-m-d', strtotime($val['tanggalperiksa']))));
+                $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
+                $days_num = no_hari($days_now);
+                // cek kode booking
+                $cekkode = $this->db->query("SELECT id from antrian_jkn where id = $kodebook")->row();
+                if(!empty($cekkode)){
+                    $newcode = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
+                    $kodebook = $newcode->id+1;
+                }
+                
+                // get jam praktek
+                $jam = $this->db->query("SELECT CONCAT_WS('-',ltrim(awal),ltrim(akhir)) as jam from mr_jadwal_tetap where poli = $val[poli] and dokter = $val[iddokter] and hari = $days_num")->row();
+                // get no urut antrian jkn
+                $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
+                                            from mr_periksa
+                                            left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
+                                            where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
+                $data = array(
+                    'id'                => $kodebook,
+                    'nomorkartu'        => '',
+                    'nik'               => $val['nik'],
+                    'norm'              => $val['norm'],
+                    'notelp'            => $val['hp'],
+                    'tanggalperiksa'    => $val['tanggalperiksa'],
+                    'kodepoli'          => $val['kodepoli'],
+                    'nomorreferensi'    => '',
+                    'jeniskunjungan'    => 1,
+                    'iddokter'          => $val['iddokter'],
+                    'jampraktek'        => $jam->jam ,
+                    'status'            => 1,
+                    'tglinsert'         => date('Y-m-d h:i:s'),
+                    'namapoli'          => $val['nama_poli'],
+                    'namadokter'        => $val['nm_dokter']
 
-            );
-            if (!empty($no_antrian->no)) {
-                $estimasi = (int)$no_antrian->estimasidilayani + (3600 * 100);
-                $data['estimasidilayani'] = $estimasi;
-                $data['noantrian'] = $no_antrian->no;
-            } else {
-                // $estimasi = $data['tanggalperiksa'] . ' ' . $jam_mulai;
-                $data['noantrian'] = 1;
-                $data['estimasidilayani'] =  3600 * 100;
+                );
+                if (!empty($no_antrian->no)) {
+                    $estimasi = (int)$no_antrian->estimasidilayani + (3600 * 100);
+                    $data['estimasidilayani'] = $estimasi;
+                    $data['noantrian'] = $no_antrian->no;
+                } else {
+                    // $estimasi = $data['tanggalperiksa'] . ' ' . $jam_mulai;
+                    $data['noantrian'] = 1;
+                    $data['estimasidilayani'] =  3600 * 100;
+                }
+                $this->db->insert($this->table, $data);
             }
-            $this->db->insert($this->table, $data);
         }
     }
 }
