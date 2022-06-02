@@ -315,7 +315,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							'data'		=> $data,
 						]);
 						// update task id sampai 3
-						for ($i=3; $i <=3 ; $i++) { 
+						for ($i=1; $i <=3 ; $i++) { 
 							$waktu 				= round(microtime(true) * 1000);
 							$taskdata =array("kodebooking" => "$val[id]",
 							"taskid" => $i,
@@ -324,7 +324,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							$data = json_encode($data);
 							$url = getMethod('updateantrian',$this->basehfis,$this->method);
 							// print_r($data);exit();
-							$this->executeHfis($url,$data,"POST");
+							$this->executeHfislog($url,$data,"POST");
 						}
 
 						$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
