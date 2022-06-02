@@ -306,6 +306,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			//  die(json_encode($data));
 			$url = getMethod('tambahantrian',$this->basehfis,$this->method);
 			$res = $this->executeHfislog($url,$data,"POST");
+			echo $res;
 			if($res){
 				$response = json_decode($res);
 				// debug($response);
