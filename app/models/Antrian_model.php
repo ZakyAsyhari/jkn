@@ -316,9 +316,9 @@ class Antrian_model extends CI_Model
 					-- AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
                     AND DATE(mrp.tgldaftar) = '$tglsekarang'
                     order by mrp.id desc 
-                    LIMIT 2")->result_array();
-                    debug($dnonjkn);
-                    exit();
+                    LIMIT 5")->result_array();
+                    // debug($dnonjkn);
+                    // exit();
         foreach ($dnonjkn as $key => $val) {
             $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = $val[norm], nik = $val[nik],kodepoli =$val[kodepoli],iddokter= $val[iddokter],tanggalperiksa = $val[tanggalperiksa]")->row(); 
             if($cekdatajkn != null){
