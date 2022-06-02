@@ -334,6 +334,14 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							echo "$val[id] success!!<br>";
 							return $res;
 						}else if($response->metadata->code == "208"){
+							$taskdata =array("kodebooking" => "$val[id]",
+								"taskid" => $i,
+								"waktu" => "$waktu");
+			
+								$data = json_encode($taskdata);
+								$url = getMethod('updateantrian',$this->basehfis,$this->method);
+								// print_r($data);exit();
+								$this->executeHfislog($url,$data,"POST");
 							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 							echo "$val[id] success!!<br>";
 						}else{
