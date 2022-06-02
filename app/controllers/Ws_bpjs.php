@@ -139,7 +139,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		if($tipe == "2"){
 			header('Content-Type: application/json; charset=utf-8');
 			echo $content;
-			exit();
+			// exit();
 		}
 		$time['time']=$headers['time'];
 		$merger_content=json_encode(array_merge((array)json_decode($content, true),$time));
@@ -269,8 +269,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		debug($datas);
-		exit();
+		// debug($datas);
+		// exit();
 		foreach ($datas as $key => $val) {
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			if($cek_karcis != null){
@@ -309,7 +309,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			echo $res;
 				if($res){
 					$response = json_decode($res);
-					if($response->metadata->code == "201"){
+					if($response->metadata->code == "200"){
 						// add log
 						$this->db->insert('log_jkn', [
 							'data'		=> $data,
@@ -328,6 +328,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 						}
 
 						$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+						echo "$val[id] <br>";
 						return $res;
 					}else{
 						return $res;
