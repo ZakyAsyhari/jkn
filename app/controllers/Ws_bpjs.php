@@ -308,7 +308,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			$res = $this->executeHfislog($url,$data,"POST");
 			if($res){
 				$response = json_decode($res);
-				echo $response;
+				debug($response);
 					if($response->metadata->code == "200"){
 						// add log
 						$this->db->insert('log_jkn', [
