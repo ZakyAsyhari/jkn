@@ -312,7 +312,7 @@ class Antrian_model extends CI_Model
 					join mr_ktp mrk on mrk.rm = mmr.rm
 					join muser on muser.nik = mrp.kode_dok
 					join mpoli on mpoli.poli = mrp.poli
-                    WHERE muser.id_extpass is not null and mpoli.s_name is not null
+                    WHERE 1=1
 					AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
                     AND DATE(mrp.tgldaftar) = '$tglsekarang'
                     order by mrp.id desc 
