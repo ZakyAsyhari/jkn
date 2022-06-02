@@ -312,8 +312,6 @@ class Antrian_model extends CI_Model
 					join mr_ktp mrk on mrk.rm = mmr.rm
 					join muser on muser.nik = mrp.kode_dok
 					join mpoli on mpoli.poli = mrp.poli
-                    WHERE NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
-                    AND DATE(mrp.tgldaftar) = '2022-06-01'
                     order by mrp.id desc 
                     LIMIT 10")->result_array();
                     debug($dnonjkn);
