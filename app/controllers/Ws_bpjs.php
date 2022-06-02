@@ -328,7 +328,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 						}
 
 						$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-						echo "$val[id] <br>";
+						echo "$val[id] success!!<br>";
 						return $res;
 					}else{
 						return $res;
