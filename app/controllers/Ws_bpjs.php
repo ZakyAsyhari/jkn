@@ -265,7 +265,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
-								   where (ap.flag_ws = 'Y') and date(ap.tglinsert) = '$tglsekarang' 
+								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and date(ap.tglinsert) = '$tglsekarang' 
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
@@ -308,7 +308,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			$res = $this->executeHfislog($url,$data,"POST");
 			if($res){
 				$response = json_decode($res);
-				debug($response);
+				// debug($response);
 					if($response->metadata->code == "200"){
 						// add log
 						$this->db->insert('log_jkn', [
