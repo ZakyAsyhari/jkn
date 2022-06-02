@@ -261,7 +261,6 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$this->antrian->get_non_jkn();
 		// exit();
 		// cek data di mr_karcis cetak
-		$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => 1654153380]);
 		
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
@@ -270,8 +269,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		// debug($datas);
-		// exit();
+		debug($datas);
+		exit();
 		foreach ($datas as $key => $val) {
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			if($cek_karcis != null){
