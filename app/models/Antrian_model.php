@@ -369,6 +369,7 @@ class Antrian_model extends CI_Model
                     $data['estimasidilayani'] =  3600 * 100;
                 }
                 $this->db->insert($this->table, $data);
+                echo " $kodebook || $val[norm] <br>";
             }
         }
     }
