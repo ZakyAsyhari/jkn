@@ -261,6 +261,11 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$this->antrian->get_non_jkn();
 		// exit();
 		// cek data di mr_karcis cetak
+		$cekcek = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
+								   from antrian_jkn ap
+								   join mpoli on mpoli.s_name = ap.kodepoli
+								   join muser on muser.nik = ap.iddokter
+								   LIMIT 10 ")->result_array();
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join mpoli on mpoli.s_name = ap.kodepoli
@@ -270,7 +275,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		debug($datas);
+		debug($cekcek);
 		exit();
 		foreach ($datas as $key => $val) {
 			$kuota = $this->antrian->set_kuota($val);
