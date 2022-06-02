@@ -333,6 +333,9 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 							echo "$val[id] success!!<br>";
 							return $res;
+						}else if($response->metadata->code == "208"){
+							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+							echo "$val[id] success!!<br>";
 						}else{
 							return $res;
 						}
