@@ -317,8 +317,8 @@ class Antrian_model extends CI_Model
                     AND DATE(mrp.tgldaftar) = '$tglsekarang'
                     order by mrp.id desc 
                     LIMIT 10")->result_array();
-                    // debug($dnonjkn);
-                    // exit();
+                    debug($dnonjkn);
+                    exit();
         foreach ($dnonjkn as $key => $val) {
             $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
             $kodebook = $generate->id;
