@@ -269,66 +269,69 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   LIMIT 10
 								")->result_array();
 		// print_r($datas);
-		debug($datas);
-		exit();
+		// debug($datas);
+		// exit();
 		foreach ($datas as $key => $val) {
-			$kuota = $this->antrian->set_kuota($val);
-			$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
-			$data = array(
-				"kodebooking" => $val['id'],
-				"jenispasien"=> $jp,
-				"nomorkartu"=> $val['nomorkartu'],
-				"nik" => $val['nik'],
-				"nohp" => $val['notelp'],
-				"kodepoli" => $val['kodepoli'],
-				"namapoli" => $val['namapoli'],
-				"pasienbaru" => 0,
-				"norm" => $val['norm'],
-				"tanggalperiksa" => $val['tanggalperiksa'],
-				"kodedokter" => $val['kode_dokter'],
-				"namadokter" => $val['namadokter'],
-				"jampraktek" => $val['jampraktek'],
-				"jeniskunjungan" => $val['jeniskunjungan'],
-				"nomorreferensi" => $val['nomorreferensi'],
-				"nomorantrean" => 'A-'.$val['noantrian'],
-				"angkaantrean"  => $val['noantrian'],
-				"estimasidilayani" => $val['notelp'],
-				"sisakuotajkn" => (int)$kuota['sisanonjkn'],
-				"kuotajkn" => (int)$kuota['kuotajkn'],
-				"sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
-				"kuotanonjkn" => (int)$kuota['kuotanonjkn'],
-				"keterangan" => $val['keterangan']
-			);
-		 $data = json_encode($data);
-		//  header('Content-Type: application/json; charset=utf-8');
-		//  die(json_encode($data));
-		$url = getMethod('tambahantrian',$this->basehfis,$this->method);
-		$res = $this->executeHfislog($url,$data,"POST");
-		echo $res;
-			if($res){
-				$response = json_decode($res);
-				if($response->metadata->code == "201"){
-					// add log
-					$this->db->insert('log_jkn', [
-						'data'		=> $data,
-					]);
-					// update task id sampai 3
-					for ($i=3; $i <=3 ; $i++) { 
-						$waktu 				= round(microtime(true) * 1000);
-						$taskdata =array("kodebooking" => "$val[id]",
-						"taskid" => $i,
-						"waktu" => "$waktu");
-	
-						$data = json_encode($data);
-						$url = getMethod('updateantrian',$this->basehfis,$this->method);
-						// print_r($data);exit();
-						$this->executeHfis($url,$data,"POST");
-					}
+			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where norm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
+			if($cek_karcis != null){
+				$kuota = $this->antrian->set_kuota($val);
+				$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
+				$data = array(
+					"kodebooking" => $val['id'],
+					"jenispasien"=> $jp,
+					"nomorkartu"=> $val['nomorkartu'],
+					"nik" => $val['nik'],
+					"nohp" => $val['notelp'],
+					"kodepoli" => $val['kodepoli'],
+					"namapoli" => $val['namapoli'],
+					"pasienbaru" => 0,
+					"norm" => $val['norm'],
+					"tanggalperiksa" => $val['tanggalperiksa'],
+					"kodedokter" => $val['kode_dokter'],
+					"namadokter" => $val['namadokter'],
+					"jampraktek" => $val['jampraktek'],
+					"jeniskunjungan" => $val['jeniskunjungan'],
+					"nomorreferensi" => $val['nomorreferensi'],
+					"nomorantrean" => 'A-'.$val['noantrian'],
+					"angkaantrean"  => $val['noantrian'],
+					"estimasidilayani" => $val['notelp'],
+					"sisakuotajkn" => (int)$kuota['sisanonjkn'],
+					"kuotajkn" => (int)$kuota['kuotajkn'],
+					"sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
+					"kuotanonjkn" => (int)$kuota['kuotanonjkn'],
+					"keterangan" => $val['keterangan']
+				);
+			$data = json_encode($data);
+			//  header('Content-Type: application/json; charset=utf-8');
+			//  die(json_encode($data));
+			$url = getMethod('tambahantrian',$this->basehfis,$this->method);
+			$res = $this->executeHfislog($url,$data,"POST");
+			echo $res;
+				if($res){
+					$response = json_decode($res);
+					if($response->metadata->code == "201"){
+						// add log
+						$this->db->insert('log_jkn', [
+							'data'		=> $data,
+						]);
+						// update task id sampai 3
+						for ($i=3; $i <=3 ; $i++) { 
+							$waktu 				= round(microtime(true) * 1000);
+							$taskdata =array("kodebooking" => "$val[id]",
+							"taskid" => $i,
+							"waktu" => "$waktu");
+		
+							$data = json_encode($data);
+							$url = getMethod('updateantrian',$this->basehfis,$this->method);
+							// print_r($data);exit();
+							$this->executeHfis($url,$data,"POST");
+						}
 
-					$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-					return $res;
-				}else{
-					return $res;
+						$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+						return $res;
+					}else{
+						return $res;
+					}
 				}
 			}
 		}
