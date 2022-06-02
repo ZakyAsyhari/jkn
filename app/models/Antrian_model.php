@@ -320,13 +320,12 @@ class Antrian_model extends CI_Model
                     // debug($dnonjkn);
                     // exit();
         foreach ($dnonjkn as $key => $val) {
-            debug($val['tanggalperiksa']);
-            $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = $val[norm], nik = $val[nik],kodepoli =$val[kodepoli],iddokter= $val[iddokter],tanggalperiksa = '$val[tanggalperiksa]'")->row(); 
+            $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
+            $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = $val[norm], nik = $val[nik],kodepoli =$val[kodepoli],iddokter= $val[iddokter],tanggalperiksa = '$tanggalperiksa'")->row(); 
             if($cekdatajkn != null){
                 $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
                 $kodebook = $generate->id;
                 $days_now = date("D", strtotime(date('Y-m-d', strtotime($val['tanggalperiksa']))));
-                $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
                 $days_num = no_hari($days_now);
                 // cek kode booking
                 $cekkode = $this->db->query("SELECT id from antrian_jkn where id = $kodebook")->row();
