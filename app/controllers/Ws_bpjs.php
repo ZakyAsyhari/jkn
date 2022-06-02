@@ -302,6 +302,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 						"kuotanonjkn" => (int)$kuota['kuotanonjkn'],
 						"keterangan" => $val['keterangan']
 					);
+					debug($data);
 				$data = json_encode($data);
 				//  header('Content-Type: application/json; charset=utf-8');
 				//  die(json_encode($data));
