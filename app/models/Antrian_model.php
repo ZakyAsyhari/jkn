@@ -322,7 +322,7 @@ class Antrian_model extends CI_Model
         foreach ($dnonjkn as $key => $val) {
             $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
             $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = '$val[norm]' and nik = '$val[nik]' and kodepoli ='$val[kodepoli]' and iddokter= '$val[iddokter]' and tanggalperiksa = '$tanggalperiksa'")->row(); 
-            if($cekdatajkn != null){
+            if($cekdatajkn == null){
                 $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
                 $kodebook = $generate->id;
                 $days_now = date("D", strtotime(date('Y-m-d', strtotime($val['tanggalperiksa']))));
