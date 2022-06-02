@@ -276,7 +276,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 				if($cek_karcis != null){
 					$kuota = $this->antrian->set_kuota($val);
-					$jp = ($val['nomorkartu']) ? 'JKN' : 'NON JKN';
+					$jp = ($val['nomorkartu'] != null and $val['nomorreferensi'] != null) ? 'JKN' : 'NON JKN';
 					$data = array(
 						"kodebooking" => $val['id'],
 						"jenispasien"=> $jp,
