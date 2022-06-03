@@ -316,7 +316,7 @@ class Antrian_model extends CI_Model
 					-- AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
                     AND DATE(mrp.tgldaftar) = '$tglsekarang'
                     order by mrp.id desc 
-                    LIMIT 5")->result_array();
+                    LIMIT 20")->result_array();
                     // debug($dnonjkn);
                     // exit();
         foreach ($dnonjkn as $key => $val) {
