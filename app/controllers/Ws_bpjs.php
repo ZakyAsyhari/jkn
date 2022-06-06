@@ -310,10 +310,10 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 				$res = $this->executeHfislog($url,$data,"POST");
 				echo $val['id'];
 				echo $res;
+				$this->db->update('antrian_jkn', ['respon' => $res], ['id' => $val['id']]);
 				if($res){
 					$response = json_decode($res);
 					// debug($response);
-					$this->db->update('antrian_jkn', ['respon' => $res], ['id' => $val['id']]);
 						if($response->metadata->code == "200"){
 							// add log
 							$this->db->insert('log_jkn', [
