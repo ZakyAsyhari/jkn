@@ -272,7 +272,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		// debug($datas);
 		// exit();
 		foreach ($datas as $key => $val) {
-			if($val['kodepoli'] != null and $val['kode_dokter'] != null){
+			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 				if($cek_karcis != null){
 					$kuota = $this->antrian->set_kuota($val);
@@ -285,7 +285,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 						"nohp" => $val['notelp'],
 						"kodepoli" => $val['kodepoli'],
 						"namapoli" => $val['namapoli'],
-						"pasienbaru" => 0,
+						"pasienbaru" => '1',
 						"norm" => $val['norm'],
 						"tanggalperiksa" => $val['tanggalperiksa'],
 						"kodedokter" => $val['kode_dokter'],
@@ -352,7 +352,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 						}
 					}
 				}
-			}
+			// }
 		}
 	}
 
