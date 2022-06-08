@@ -227,15 +227,16 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$pesan = '';
 		$kodebooking 		= $this->input->post('kodebooking');
 		$taskid 			= $this->input->post('taskid');
-		$waktu 				= round(microtime(true) * 1000);
+		// $waktu 				= round(microtime(true) * 1000);
+		$waktu 			= $this->input->post('waktu');
 
 		if(empty($kodebooking)){
 			$pesan = "Kode Booking Belum di isi";
 		}
 
-		// if(empty($waktu)){
-		// 	$pesan = "Waktu Belum di isi";
-		// }
+		if(empty($waktu)){
+			$pesan = "Waktu Belum di isi";
+		}
 		if(empty($taskid)){
 			$pesan = "Task Id Belum di isi";
 		}
