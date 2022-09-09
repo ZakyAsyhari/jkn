@@ -304,7 +304,7 @@ class Antrian_model extends CI_Model
 
     public function get_non_jkn(){
         $tglsekarang = date('Y-m-d');
-        $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tgldaftar as tanggalperiksa,mrp.nourut,
+        $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tanggal as tanggalperiksa,mrp.nourut,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
 					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli,mrk.jkn
 					from mr_periksa as mrp
@@ -314,7 +314,7 @@ class Antrian_model extends CI_Model
 					join mpoli on mpoli.poli = mrp.poli
                     WHERE muser.id_extpass is not null and mpoli.s_name is not null
 					-- AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
-                    AND DATE(mrp.tgldaftar) = '$tglsekarang'
+                    AND mrp.tanggal = '$tglsekarang'
                     order by mrp.id desc 
                     LIMIT 20")->result_array();
                     // debug($dnonjkn);
