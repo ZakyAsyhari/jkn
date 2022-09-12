@@ -304,7 +304,7 @@ class Antrian_model extends CI_Model
 
     public function get_non_jkn(){
         $tglsekarang = date('Y-m-d');
-        $dnonjkn = $this->db->query("SELECT mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tanggal as tanggalperiksa,mrp.nourut,
+        $dnonjkn = $this->db->query("SELECT mrp.id as id_mrp,mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tanggal as tanggalperiksa,mrp.nourut,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
 					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli,mrk.jkn
 					from mr_periksa as mrp
@@ -370,7 +370,10 @@ class Antrian_model extends CI_Model
                     $data['estimasidilayani'] =  3600 * 100;
                 }
                 $this->db->insert($this->table, $data);
+                $this->db->update('mr_periksa', ['flag_antrian' => '1'], ['id' => $val['id_mrp']]);
                 echo " $kodebook || $val[norm] <br>";
+            }else{
+                $this->db->update('mr_periksa', ['flag_antrian' => '1'], ['id' => $val['id_mrp']]);
             }
         }
     }
