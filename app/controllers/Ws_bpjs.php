@@ -266,13 +266,13 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
 								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and ap.tanggalperiksa = '$tglsekarang' order by ap.id desc
-								   LIMIT 20
+								   LIMIT 25
 								")->result_array();
-								
+
 		foreach ($datas as $key => $val) {
 			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
-			print_r($cek_karcis);
+			// print_r($cek_karcis);
 				if($cek_karcis != null){
 					$kuota = $this->antrian->set_kuota($val);
 					$jp = ($val['nomorkartu'] != null and $val['nomorreferensi'] != null) ? 'JKN' : 'NON JKN';
