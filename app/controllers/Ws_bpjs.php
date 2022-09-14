@@ -260,18 +260,14 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$tglsekarang = date('Y-m-d');
 		// insert data non jkn
 		$this->antrian->get_non_jkn();
-		// exit();
 		// cek data di mr_karcis cetak
 		
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
-								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and date(ap.tglinsert) = '$tglsekarang' order by ap.id desc
+								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and ap.tanggalperiksa = '$tglsekarang' order by ap.id desc
 								   LIMIT 10
 								")->result_array();
-		// print_r($datas);
-		// debug($datas);
-		// exit();
 		foreach ($datas as $key => $val) {
 			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
