@@ -266,9 +266,9 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
 								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and ap.tanggalperiksa = '$tglsekarang' order by ap.id asc
-								   LIMIT 50
+								   LIMIT 25
 								")->result_array();
-		debug($datas);
+		// debug($datas);
 		foreach ($datas as $key => $val) {
 			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
 				// print_r($val);
