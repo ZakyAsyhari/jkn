@@ -355,7 +355,7 @@ class Antrian_model extends CI_Model
                     'iddokter'          => $val['iddokter'],
                     'jampraktek'        => $jam->jam ,
                     'status'            => 1,
-                    'tglinsert'         => date('Y-m-d h:i:s'),
+                    'tglinsert'         => date('Y-m-d H:i:s'),
                     'namapoli'          => $val['nama_poli'],
                     'namadokter'        => $val['nm_dokter']
 
