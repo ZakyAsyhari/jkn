@@ -304,7 +304,7 @@ class Antrian_model extends CI_Model
 
     public function get_non_jkn(){
         $tglsekarang = date('Y-m-d');
-        $dnonjkn = $this->db->query("SELECT mrp.id as id_mrp,mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tanggal as tanggalperiksa,mrp.nourut,
+        $dnonjkn = $this->db->query("SELECT DISTINCT mrp.id as id_mrp,mrp.rm as norm,mrk.ktp as nik ,mmr.hp,mrp.tanggal as tanggalperiksa,mrp.nourut,
 					muser.nm_user as nm_dokter,muser.id_extpass as kode_dokter,
 					mpoli.s_name as kodepoli,mpoli.poli,muser.nik as iddokter,mpoli.nama as nama_poli,mrk.jkn
 					from mr_periksa as mrp
@@ -323,16 +323,16 @@ class Antrian_model extends CI_Model
             $tanggalperiksa = date('Y-m-d', strtotime($val['tanggalperiksa']));
             $cekdatajkn = $this->db->query("SELECT * from antrian_jkn where norm = '$val[norm]' and nik = '$val[nik]' and kodepoli ='$val[kodepoli]' and iddokter= '$val[iddokter]' and tanggalperiksa = '$tanggalperiksa'")->row(); 
             if($cekdatajkn == null){
-                $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
-                $kodebook = $generate->id;
+                // $generate = $this->db->query("SELECT UNIX_TIMESTAMP(NOW()) as id")->row();
+                // $kodebook = $generate->id;
                 $days_now = date("D", strtotime(date('Y-m-d', strtotime($val['tanggalperiksa']))));
                 $days_num = no_hari($days_now);
                 // cek kode booking
-                $cekkode = $this->db->query("SELECT id from antrian_jkn where id = $kodebook")->row();
-                if(!empty($cekkode)){
+                // $cekkode = $this->db->query("SELECT id from antrian_jkn where id = $kodebook")->row();
+                // if(!empty($cekkode)){
                     $newcode = $this->db->query("SELECT max(id) as id from antrian_jkn")->row();
                     $kodebook = $newcode->id+1;
-                }
+                // }
                 
                 // get jam praktek
                 $jam = $this->db->query("SELECT CONCAT_WS('-',ltrim(awal),ltrim(akhir)) as jam from mr_jadwal_hfis where poli = $val[poli] and dokter = $val[iddokter] and hari = $days_num")->row();
