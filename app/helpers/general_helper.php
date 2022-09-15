@@ -278,7 +278,8 @@ function getMethod($method,$baseurl,$urlparams){
 
 function generateHeader($data) 
 	{
-		date_default_timezone_set('UTC');   
+		// date_default_timezone_set('UTC');   
+		date_default_timezone_set('Asia/Jakarta');
 		$tStamp = time();
 		$data['timestamp'] = $tStamp;
 		

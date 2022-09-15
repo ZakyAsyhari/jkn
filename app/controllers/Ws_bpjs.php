@@ -273,7 +273,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			// print_r($cek_karcis);
 				if($cek_karcis != null){
-					$waktu_task = round(strtotime($cek_karcis->tglcetak) * 1000);
+					$waktu_task = strtotime($cek_karcis->tglcetak) * 1000;
 					$kuota = $this->antrian->set_kuota($val);
 					$jp = ($val['nomorkartu'] != null and $val['nomorreferensi'] != null) ? 'JKN' : 'NON JKN';
 					$data = array(
@@ -372,7 +372,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			// print_r($cek_karcis);
 				if($cek_karcis != null){
-					$waktu_task = round(strtotime($cek_karcis->tglcetak) * 1000);
+					$waktu_task = strtotime($cek_karcis->tglcetak) * 1000;
 					$kuota = $this->antrian->set_kuota($val);
 					$jp = ($val['nomorkartu'] != null and $val['nomorreferensi'] != null) ? 'JKN' : 'NON JKN';
 					$data = array(
