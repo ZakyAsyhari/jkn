@@ -270,6 +270,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								")->result_array();
 		foreach ($datas as $key => $val) {
 			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
+				print_r($val);
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			print_r($cek_karcis);
 				if($cek_karcis != null){
