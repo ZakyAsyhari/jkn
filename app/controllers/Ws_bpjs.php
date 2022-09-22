@@ -460,7 +460,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
 								   where ap.flag_ws is null and DATE_FORMAT(ap.tanggalperiksa,'%Y-%m') = '$tglsekarang' and ap.jampraktek is not null order by ap.id asc
-								   LIMIT 50
+								   LIMIT 100
 								")->result_array();
 		// debug($datas);
 		foreach ($datas as $key => $val) {
