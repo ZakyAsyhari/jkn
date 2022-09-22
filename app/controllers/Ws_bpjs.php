@@ -464,8 +464,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								")->result_array();
 		// debug($datas);
 		foreach ($datas as $key => $val) {
-			// if($val['kodepoli'] != null and $val['kode_dokter'] != null){
-				// print_r($val);
+			
 			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			// print_r($cek_karcis);
 				if($cek_karcis != null){
@@ -525,7 +524,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							}
 
 							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-							echo "$val[id] success!!<br>";
+							echo "$val[id] success!!<br>\n";
 						}else if($response->metadata->code == "208"){
 							for ($i=1; $i <=3 ; $i++) { 
 								$waktu 				= round(microtime(true) * 1000);
@@ -538,7 +537,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								$this->executeHfislog($url,$data,"POST");
 							}
 								$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-							echo "$val[id] success!!<br>";
+							echo "$val[id] success!!<br>\n";
 						}else{
 							echo $res;
 						}
