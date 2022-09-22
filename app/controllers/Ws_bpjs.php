@@ -542,6 +542,8 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 							echo "\n".$res;
 						}
 					}
+				}else{
+					$this->db->update('antrian_jkn', ['respon' => 'Data tidak ditemukan di karcis cetak','flag_ws' => 'P'], ['id' => $val['id']]);
 				}
 			// }
 		}
