@@ -500,7 +500,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 				$data = json_encode($data);
 				$url = getMethod('tambahantrian',$this->basehfis,$this->method);
 				$res = $this->executeHfislog($url,$data,"POST");
-				echo '\n'.json_encode($res);
+				echo "\n".json_encode($res);
 				$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'Y'], ['id' => $val['id']]);
 				if($res){
 					$response = json_decode($res);
@@ -539,7 +539,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 								$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
 							echo "$val[id] success!!<br>\n";
 						}else{
-							echo $res;
+							echo "\n".$res;
 						}
 					}
 				}
