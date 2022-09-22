@@ -453,14 +453,14 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 	public function pushnatrianbulan(){
 		$this->load->model('Antrian_model', 'antrian');
-		$tglsekarang = '2022-06';
+		$tglsekarang = '2022-07';
 		// cek data di mr_karcis cetak
 		
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
 								   where ap.flag_ws is null and DATE_FORMAT(ap.tanggalperiksa,'%Y-%m') = '$tglsekarang' and ap.jampraktek is not null order by ap.id asc
-								   LIMIT 70
+								   LIMIT 80
 								")->result_array();
 		// debug($datas);
 		foreach ($datas as $key => $val) {
