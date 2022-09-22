@@ -452,7 +452,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 	}
 
 	public function pushnatrianbulan(){
-		$this->load->model('Antrian_model', 'antrian');
+		// $this->load->model('Antrian_model', 'antrian');
 		$tglsekarang = '2022-06';
 		// cek data di mr_karcis cetak
 		
