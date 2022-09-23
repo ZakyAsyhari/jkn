@@ -453,7 +453,7 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 	public function pushnatrianbulan(){
 		$this->load->model('Antrian_model', 'antrian');
-		$tglsekarang = '2022-07';
+		$tglsekarang = '2022-08';
 		// cek data di mr_karcis cetak
 		
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
