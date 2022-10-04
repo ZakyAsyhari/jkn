@@ -265,15 +265,15 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 		$datas = $this->db->query("SELECT ap.*,muser.id_extPass as kode_dokter
 								   from antrian_jkn ap
 								   join muser on muser.nik = ap.iddokter
-								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and ap.tanggalperiksa = '$tglsekarang' order by ap.id asc
+								   where (ap.flag_ws = 'N' or ap.flag_ws is null) and ap.tanggalperiksa = '$tglsekarang' order by ap.id,ap.noantrian asc
 								   LIMIT 25
 								")->result_array();
 		// debug($datas);
 		foreach ($datas as $key => $val) {
-			$cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
+			// $cek_karcis = $this->db->query("SELECT * from mr_karcis_cetak where rm = '$val[norm]' and dokter = '$val[iddokter]' and tanggal = '$val[tanggalperiksa]'")->row();
 			// print_r($cek_karcis);
-				if($cek_karcis != null){
-					$waktu_task = strtotime($cek_karcis->tglcetak) * 1000;
+				// if($cek_karcis != null){
+				// 	$waktu_task = strtotime($cek_karcis->tglcetak) * 1000;
 					$kuota = $this->antrian->set_kuota($val);
 					$jp = ($val['nomorkartu'] != null and $val['nomorreferensi'] != null) ? 'JKN' : 'NON JKN';
 					$data = array(
@@ -305,50 +305,51 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 				$data = json_encode($data);
 				$url = getMethod('tambahantrian',$this->basehfis,$this->method);
 				$res = $this->executeHfislog($url,$data,"POST");
-				echo json_encode($res);
+				echo "\n $val[id]".json_encode($res)."\n";
 				$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'Y'], ['id' => $val['id']]);
-				if($res){
-					$response = json_decode($res);
-					// debug($response);
-						if($response->metadata->code == "200"){
-							// add log
-							$this->db->insert('log_jkn', [
-								'data'		=> $data,
-							]);
-							// update task id sampai 3
-							for ($i=1; $i <=3 ; $i++) { 
-								$waktu 				= round(microtime(true) * 1000);
-								$taskdata =array("kodebooking" => "$val[id]",
-								"taskid" => $i,
-								"waktu" => "$waktu_task");
+				#COMMAND PUSH TASK ID 1-3
+				// if($res){
+				// 	$response = json_decode($res);
+				// 	// debug($response);
+				// 		if($response->metadata->code == "200"){
+				// 			// add log
+				// 			$this->db->insert('log_jkn', [
+				// 				'data'		=> $data,
+				// 			]);
+				// 			// update task id sampai 3
+				// 			for ($i=1; $i <=3 ; $i++) { 
+				// 				$waktu 				= round(microtime(true) * 1000);
+				// 				$taskdata =array("kodebooking" => "$val[id]",
+				// 				"taskid" => $i,
+				// 				"waktu" => "$waktu_task");
 			
-								$data = json_encode($taskdata);
-								$url = getMethod('updateantrian',$this->basehfis,$this->method);
-								$this->executeHfislog($url,$data,"POST");
-							}
+				// 				$data = json_encode($taskdata);
+				// 				$url = getMethod('updateantrian',$this->basehfis,$this->method);
+				// 				$this->executeHfislog($url,$data,"POST");
+				// 			}
 
-							$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-							echo "$val[id] success!!<br>";
-						}else if($response->metadata->code == "208"){
-							for ($i=1; $i <=3 ; $i++) { 
-								$waktu 				= round(microtime(true) * 1000);
-							$taskdata =array("kodebooking" => "$val[id]",
-								"taskid" => $i,
-								"waktu" => "$waktu_task");
+				// 			$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+				// 			echo "$val[id] success!!<br>";
+				// 		}else if($response->metadata->code == "208"){
+				// 			for ($i=1; $i <=3 ; $i++) { 
+				// 				$waktu 				= round(microtime(true) * 1000);
+				// 			$taskdata =array("kodebooking" => "$val[id]",
+				// 				"taskid" => $i,
+				// 				"waktu" => "$waktu_task");
 			
-								$data = json_encode($taskdata);
-								$url = getMethod('updateantrian',$this->basehfis,$this->method);
-								$this->executeHfislog($url,$data,"POST");
-							}
-								$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
-							echo "$val[id] success!!<br>";
-						}else{
-							echo $res;
-						}
-					}
-				}else{
-					$this->db->update('antrian_jkn', ['respon' => 'Data tidak ditemukan di karcis cetak','flag_ws' => 'P'], ['id' => $val['id']]);
-				}
+				// 				$data = json_encode($taskdata);
+				// 				$url = getMethod('updateantrian',$this->basehfis,$this->method);
+				// 				$this->executeHfislog($url,$data,"POST");
+				// 			}
+				// 				$this->db->update('antrian_jkn', ['flag_ws' => 'Y'], ['id' => $val['id']]);
+				// 			echo "$val[id] success!!<br>";
+				// 		}else{
+				// 			echo $res;
+				// 		}
+				// 	}
+				// }else{
+				// 	$this->db->update('antrian_jkn', ['respon' => 'Data tidak ditemukan di karcis cetak','flag_ws' => 'P'], ['id' => $val['id']]);
+				// }
 			// }
 		}
 	}

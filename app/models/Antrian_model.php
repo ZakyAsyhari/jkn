@@ -315,7 +315,7 @@ class Antrian_model extends CI_Model
                     WHERE muser.id_extpass is not null and mpoli.s_name is not null
 					-- AND NOT EXISTS (select norm,nik,kodepoli,iddokter from antrian_jkn)
                     AND mrp.tanggal = '$tglsekarang' and mrp.flag_antrian = '0'
-                    order by mrp.id desc 
+                    order by mrp.id asc 
                     LIMIT 20")->result_array();
                     // debug($dnonjkn);
                     // exit();
