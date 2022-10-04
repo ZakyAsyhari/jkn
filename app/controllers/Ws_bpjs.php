@@ -306,7 +306,18 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 				$url = getMethod('tambahantrian',$this->basehfis,$this->method);
 				$res = $this->executeHfislog($url,$data,"POST");
 				echo "\n $val[id]".json_encode($res)."\n";
-				$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'Y'], ['id' => $val['id']]);
+				if($res){
+					$response = json_decode($res);
+					if($response->metadata->code == "200"){
+						$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'Y'], ['id' => $val['id']]);
+					}else if($response->metadata->code == "200"){
+						$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'Y'], ['id' => $val['id']]);
+					}else{
+						$this->db->update('antrian_jkn', ['respon' => $res,'flag_ws' => 'N'], ['id' => $val['id']]);
+					}
+
+				}
+
 				#COMMAND PUSH TASK ID 1-3
 				// if($res){
 				// 	$response = json_decode($res);
