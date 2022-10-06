@@ -217,8 +217,15 @@ var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
 
 		$data = json_encode($data);
 		$url = getMethod('batalantrian',$this->basehfis,$this->method);
+		$res = $this->executeHfislog($url,$data,"POST");
+		$response = json_decode($res);
+		if($response->metadata->code == "200"){
+			$this->db->update('antrian_jkn', ['status' => 5, 'keterangan' => $keterangan], ['id' => $kodebooking]);
+		}
+		// print_r($res);
+		// exit();
 		// print_r($data);exit();
-		return $this->executeHfis($url,$data,"POST");
+		echo $res;
 	}
 
 
