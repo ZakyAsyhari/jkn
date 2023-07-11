@@ -136,8 +136,7 @@ class Antrian extends Rest
                 $output =  array(
                     'response' => null,
                     'metadata' => array(
-                        'message'           => 'data antrian gagal dimasukkan',
-                        'cause'             => 'format tanggal salah atau backdate',
+                        'message'           => 'format tanggal salah atau backdate',
                         'column'            => strtolower($keys_tgl),
                         'code'              => 201
                     ),
@@ -147,8 +146,7 @@ class Antrian extends Rest
                 $output =  array(
                     'response' => null,
                     'metadata' => array(
-                        'message'           => 'data antrian gagal dimasukkan',
-                        'cause'             => 'tanggal antrian yang diminta melebihi 90 hari',
+                        'message'           => 'tanggal antrian yang diminta melebihi 90 hari',
                         'column'            => strtolower($keys_range),
                         'code'              => 201
                     ),
@@ -159,8 +157,7 @@ class Antrian extends Rest
                 $output =  array(
                     'response' => null,
                     'metadata' => array(
-                        'message'           => 'data antrian gagal dimasukkan',
-                        'cause'             => 'panjang value kolom tidak sesuai',
+                        'message'           => 'panjang value kolom tidak sesuai',
                         'column'            => strtolower($keys_length),
                         'code'              => 201
                     ),
@@ -214,8 +211,7 @@ class Antrian extends Rest
                     $output =  array(
                         'response' => null,
                         'metadata' => array(
-                            'message'           => 'data antrian gagal dimasukkan',
-                            'cause'             => 'Jadwal Dokter ' . $reset_jadwal['namadokter'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
+                            'message'           => 'Jadwal Dokter ' . $reset_jadwal['namadokter'] . ' Tersebut Belum Tersedia, Silahkan Reschedule Tanggal dan Jam Praktek Lainnya',
                             'code'              => 201
                         ),
                     );
@@ -311,8 +307,7 @@ class Antrian extends Rest
                         $output =  array(
                             'response' => null,
                             'metadata' => array(
-                                'message'           => 'data antrian gagal dimasukkan',
-                                'cause'             => 'pasien telah didaftarkan',
+                                'message'           => 'Pasien telah didaftarkan',
                                 'code'              => 201
                             ),
                         );
@@ -346,7 +341,6 @@ class Antrian extends Rest
                             'response' => null,
                             'metadata' => array(
                                 'message'           => 'Pendaftaran ke Poli Ini Sedang Tutup',
-                                'cause'             => 'kode poli kosong atau tidak sesuai jadwal',
                                 'code'              => 201
                             ),
                         );
@@ -358,8 +352,7 @@ class Antrian extends Rest
             $output =  array(
                 'response' => null,
                 'metadata' => array(
-                    'message'           => 'data antrian gagal dimasukkan',
-                    'cause'             => 'data kosong atau tidak sesuai',
+                    'message'           => 'data antrian gagal dimasukkan,data kosong atau tidak sesuai',
                     'column'            => strtolower($keys_kosong),
                     'code'              => 201
                 ),
