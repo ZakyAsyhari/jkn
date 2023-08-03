@@ -353,6 +353,7 @@ class Antrian extends Rest
                 'response' => null,
                 'metadata' => array(
                     'message'           => 'data antrian gagal dimasukkan,data '.strtolower($keys_kosong).' kosong atau tidak sesuai',
+                    // 'column'            => strtolower($keys_kosong),
                     'code'              => 201
                 ),
             );
