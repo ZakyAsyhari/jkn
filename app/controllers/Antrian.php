@@ -296,9 +296,9 @@ class Antrian extends Rest
                                 $url = getMethod('updateantrian',$this->basehfis,$this->method);
                                 // print_r($data);exit();
                                 $this->executeHfis($url,$data,"POST");
-                                return $res;
+                                // return $res;
                             }else{
-                                return $res;
+                                // return $res;
                             }
                         }
 
