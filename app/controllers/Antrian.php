@@ -34,7 +34,7 @@ class Antrian extends Rest
 								'updateantrian'		=> 'antrean/updatewaktu',
 								'tambahantrian'		=> 'antrean/add'
 								);
-    var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antrean_rs/';
+    var $basehfis		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs/';
     private $secretkey = 'e78eabacc9a866b3af284be1fe864f76';
     private $account;
 
@@ -73,8 +73,6 @@ class Antrian extends Rest
             'jeniskunjungan'    => $this->post('jeniskunjungan'),
             'iddokter'          => $this->post('kodedokter'),
             'jampraktek'        => $this->post('jampraktek'),
-            // 'jenisrequest'      => $this->post('jenisrequest'),
-            // 'polieksekutif'     => $this->post('polieksekutif'),
         );
 
         $output         = [];
@@ -279,8 +277,6 @@ class Antrian extends Rest
                             "keterangan" => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
                          );
                          $data = json_encode($data);
-                        //  header('Content-Type: application/json; charset=utf-8');
-                        //  die(json_encode($data));
                         $url = getMethod('tambahantrian',$this->basehfis,$this->method);
                         $res = $this->executeHfis($url,$data,"POST");
                         if($res){
@@ -294,11 +290,7 @@ class Antrian extends Rest
             
                                 $data = json_encode($data);
                                 $url = getMethod('updateantrian',$this->basehfis,$this->method);
-                                // print_r($data);exit();
                                 $this->executeHfis($url,$data,"POST");
-                                // return $res;
-                            }else{
-                                // return $res;
                             }
                         }
 
@@ -311,29 +303,6 @@ class Antrian extends Rest
                                 'code'              => 201
                             ),
                         );
-                        // $return = $this->antrian->antrian_get($solve['id']);
-                        // $kuota = $this->antrian->set_kuota($data);
-
-                        // $output = array(
-                        //     'response'      => array(
-                        //         'nomorantrean'      => $return->noantrian,
-                        //         'angkaantrean'      => $return->noantrian,
-                        //         'kodeboking'        => $return->id,
-                        //         'norm'              => $return->norm,
-                        //         'namapoli'          => $return->namapoli,
-                        //         'namadokter'        => $return->namadokter,
-                        //         'estimasidilayani'  => (int)$return->estimasidilayani,
-                        //         'sisakuotajkn'      => (int)$kuota['sisanonjkn'],
-                        //         'kuotajkn'          => (int)$kuota['kuotajkn'],
-                        //         'sisakuotanonjkn'   => (int)$kuota['sisanonjkn'],
-                        //         'kuotanonjkn'       => (int)$kuota['kuotanonjkn'],
-                        //         'keterangan'        => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
-                        //     ),
-                        //     'metadata'      => array(
-                        //         'message'       => 'Ok',
-                        //         'code'          => 200
-                        //     ),
-                        // );
 
                     } else {
                         // Poli tidak ditemukan
@@ -353,7 +322,7 @@ class Antrian extends Rest
                 'response' => null,
                 'metadata' => array(
                     'message'           => 'data antrian gagal dimasukkan,data '.strtolower($keys_kosong).' kosong atau tidak sesuai',
-                    // 'column'            => strtolower($keys_kosong),
+                    'column'            => strtolower($keys_kosong),
                     'code'              => 201
                 ),
             );
