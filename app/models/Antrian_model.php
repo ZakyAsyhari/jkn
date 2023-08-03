@@ -100,13 +100,21 @@ class Antrian_model extends CI_Model
         $date = date_create($get_jadwal->mulai);
         $jam_mulai = date_format($date, "H:i:s.u");
 
-        // generate no antrian 
+        // generate no antrian ori
         $tanggalperiksa = $data['tanggalperiksa'];
-        $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
-                                        from mr_periksa
-                                        left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
-                                        where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
+        //$no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
+        //                                from mr_periksa
+        //                                left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
+        //                                where mr_periksa.tglperiksa='$tanggalperiksa'")->row();
                                         // upper(mr_periksa.poli)=upper('$idPoli') and
+        
+        // generate no antrian query psi 20230711
+        $no_antrian = $this->db->query("SELECT max(mr_periksa.nourut)+1 as no,max(antrian_jkn.estimasidilayani) as estimasidilayani  
+        from mr_periksa
+        left join antrian_jkn on antrian_jkn.norm = mr_periksa.rm
+        where mr_periksa.tanggal='$tanggalperiksa' && mr_periksa.kode_dok='$idDokterrs'")->row();
+
+
         if (!empty($no_antrian->no)) {
             $estimasi = (int)$no_antrian->estimasidilayani + (3600 * 100);
             $data['estimasidilayani'] = $estimasi;
@@ -123,8 +131,9 @@ class Antrian_model extends CI_Model
         $this->db->trans_start();
         $this->db->insert($this->table, $data);
         $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
+		$waktuPeriksa = $this->db->query("select waktu from mr_jadwal_hfis where poli='$idPoli' && dokter='$idDokterrs' && hari=$no_hari")->row();//edit psi 20230703
         $insPeriksa = array( 'id'           => $newid->id,
-                             'waktu'        => '0',
+                             'waktu'        => $waktuPeriksa->waktu,
                              'tanggal'      => $data['tanggalperiksa'],
                              'pukul'        => '',
                              'poli'         => $idPoli,
@@ -133,12 +142,12 @@ class Antrian_model extends CI_Model
                              'nourut'       => $data['noantrian'],
                             //  'catatan'      => '',
                             //  'last'         => '',
-                            //  'relasi'       => '',
+                             'relasi'       => 'BPJS',
                             //  'hubungan'     => '',
                             //  'RelasiNo'     => '',
                             //  'RelasiCtt'    => '',
                              'tgldaftar'    => $data['tglinsert'],
-                            //  'id_user'      => '',
+                             'id_user'      => 'MJKN',
                             //  'tglkeluarmr'  => null,
                             //  'tglkembalimr' => '',
                             //  'nonota'       => '',
