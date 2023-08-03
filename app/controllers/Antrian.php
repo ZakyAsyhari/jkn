@@ -103,7 +103,7 @@ class Antrian extends Rest
             }
 
             if ($key == 'jeniskunjungan') {
-                if ($value != 1 && $value != 2) {
+                if ($value != 1 && $value != 2 && $value != 3 && $value != 4) {
                     $keys_kosong = $key;
                 }
             }
