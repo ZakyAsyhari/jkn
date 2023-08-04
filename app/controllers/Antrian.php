@@ -279,20 +279,20 @@ class Antrian extends Rest
                          $data = json_encode($data);
                         $url = getMethod('tambahantrian',$this->basehfis,$this->method);
                         $res = $this->executeHfis($url,$data,"POST");
-                        if($res){
-                            $response = json_decode($res);
-                            if($response->metadata->code == "200"){
-                                // update task id
-                                $waktu 				= round(microtime(true) * 1000);
-                                $taskdata =array("kodebooking" => $return->id,
-                                "taskid" => "1",
-                                "waktu" => "$waktu");
+                        // if($res){
+                        //     $response = json_decode($res);
+                        //     if($response->metadata->code == "200"){
+                        //         // update task id
+                        //         $waktu 				= round(microtime(true) * 1000);
+                        //         $taskdata =array("kodebooking" => $return->id,
+                        //         "taskid" => "1",
+                        //         "waktu" => "$waktu");
             
-                                $data = json_encode($data);
-                                $url = getMethod('updateantrian',$this->basehfis,$this->method);
-                                $this->executeHfis($url,$data,"POST");
-                            }
-                        }
+                        //         $data = json_encode($data);
+                        //         $url = getMethod('updateantrian',$this->basehfis,$this->method);
+                        //         $this->executeHfis($url,$data,"POST");
+                        //     }
+                        // }
 
                     } else if ($solve['code'] == 2) {
                         // telah mendaftar pada hari yang sama
