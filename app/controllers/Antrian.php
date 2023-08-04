@@ -251,48 +251,48 @@ class Antrian extends Rest
                             ),
                         );
 
-                        $data = array(
-                            "kodebooking" => $return->id,
-                            "jenispasien"=> 'JKN',
-                            "nomorkartu"=> $data['nomorkartu'],
-                            "nik" => $data['nik'],
-                            "nohp" => $data['notelp'],
-                            "kodepoli" => $data['kodepoli'],
-                            "namapoli" => $return->namapoli,
-                            "pasienbaru" => 0,
-                            "norm" => $return->norm,
-                            "tanggalperiksa" => $data['tanggalperiksa'],
-                            "kodedokter" => $data['iddokter'],
-                            "namadokter" => $return->namadokter,
-                            "jampraktek" => $data['jampraktek'],
-                            "jeniskunjungan" => $data['jeniskunjungan'],
-                            "nomorreferensi" => $data['nomorreferensi'],
-                            "nomorantrean" => $return->noantrian,
-                            "angkaantrean"  => $return->noantrian,
-                            "estimasidilayani" => (int)$return->estimasidilayani,
-                            "sisakuotajkn" => (int)$kuota['sisanonjkn'],
-                            "kuotajkn" => (int)$kuota['kuotajkn'],
-                            "sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
-                            "kuotanonjkn" => (int)$kuota['kuotanonjkn'],
-                            "keterangan" => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
-                         );
-                         $data = json_encode($data);
-                        $url = getMethod('tambahantrian',$this->basehfis,$this->method);
-                        $res = $this->executeHfis($url,$data,"POST");
-                        if($res){
-                            $response = json_decode($res);
-                            if($response->metadata->code == "200"){
-                                // update task id
-                                $waktu 				= round(microtime(true) * 1000);
-                                $taskdata =array("kodebooking" => $return->id,
-                                "taskid" => "1",
-                                "waktu" => "$waktu");
+                        // $data = array(
+                        //     "kodebooking" => $return->id,
+                        //     "jenispasien"=> 'JKN',
+                        //     "nomorkartu"=> $data['nomorkartu'],
+                        //     "nik" => $data['nik'],
+                        //     "nohp" => $data['notelp'],
+                        //     "kodepoli" => $data['kodepoli'],
+                        //     "namapoli" => $return->namapoli,
+                        //     "pasienbaru" => 0,
+                        //     "norm" => $return->norm,
+                        //     "tanggalperiksa" => $data['tanggalperiksa'],
+                        //     "kodedokter" => $data['iddokter'],
+                        //     "namadokter" => $return->namadokter,
+                        //     "jampraktek" => $data['jampraktek'],
+                        //     "jeniskunjungan" => $data['jeniskunjungan'],
+                        //     "nomorreferensi" => $data['nomorreferensi'],
+                        //     "nomorantrean" => $return->noantrian,
+                        //     "angkaantrean"  => $return->noantrian,
+                        //     "estimasidilayani" => (int)$return->estimasidilayani,
+                        //     "sisakuotajkn" => (int)$kuota['sisanonjkn'],
+                        //     "kuotajkn" => (int)$kuota['kuotajkn'],
+                        //     "sisakuotanonjkn" => (int)$kuota['sisanonjkn'],
+                        //     "kuotanonjkn" => (int)$kuota['kuotanonjkn'],
+                        //     "keterangan" => 'Peserta harap 6 menit lebih awal guna pencatatan administrasi.'
+                        //  );
+                        //  $data = json_encode($data);
+                        // $url = getMethod('tambahantrian',$this->basehfis,$this->method);
+                        // $res = $this->executeHfis($url,$data,"POST");
+                        // if($res){
+                        //     $response = json_decode($res);
+                        //     if($response->metadata->code == "200"){
+                        //         // update task id
+                        //         $waktu 				= round(microtime(true) * 1000);
+                        //         $taskdata =array("kodebooking" => $return->id,
+                        //         "taskid" => "1",
+                        //         "waktu" => "$waktu");
             
-                                $data = json_encode($data);
-                                $url = getMethod('updateantrian',$this->basehfis,$this->method);
-                                $this->executeHfis($url,$data,"POST");
-                            }
-                        }
+                        //         $data = json_encode($data);
+                        //         $url = getMethod('updateantrian',$this->basehfis,$this->method);
+                        //         $this->executeHfis($url,$data,"POST");
+                        //     }
+                        // }
 
                     } else if ($solve['code'] == 2) {
                         // telah mendaftar pada hari yang sama
