@@ -234,7 +234,7 @@ class Antrian extends Rest
                             'response'      => array(
                                 'nomorantrean'      => $return->noantrian,
                                 'angkaantrean'      => $return->noantrian,
-                                'kodeboking'        => $return->id,
+                                'kodebooking'        => $return->id,
                                 'norm'              => $return->norm,
                                 'namapoli'          => $return->namapoli,
                                 'namadokter'        => $return->namadokter,
