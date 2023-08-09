@@ -131,7 +131,7 @@ class Antrian_model extends CI_Model
         $this->db->trans_start();
         $this->db->insert($this->table, $data);
         $newid = $this->db->query("SELECT max(id)+1 as id from mr_periksa")->row();
-		$waktuPeriksa = $this->db->query("select waktu from mr_jadwal_hfis where poli='$idPoli' && dokter='$idDokterrs' && hari=$no_hari")->row();//edit psi 20230703
+		$waktuPeriksa = $this->db->query("select waktu from mr_jadwal_hfis where poli='$idPoli' && dokter='$idDokterrs' && hari=$no_hari && CONCAT_WS('-',awal,akhir) = '$data[jampraktek]'")->row();//edit psi 20230703
         $insPeriksa = array( 'id'           => $newid->id,
                              'waktu'        => $waktuPeriksa->waktu,
                              'tanggal'      => $data['tanggalperiksa'],
